@@ -1,9 +1,15 @@
+import re
 import numpy as np
 import pandas as pd
 from scipy.spatial import distance
 from sklearn.preprocessing import StandardScaler
 from scipy.spatial.distance import pdist, squareform
+import openai
+from scipy.spatial.distance import cosine
 
+BASE_URL = "https://openai-proxy.sellestial.com/api/"
+API_KEY = "4ppeg2osd4nm"
+client = openai.OpenAI(api_key=API_KEY, base_url=BASE_URL)
 
 # TODO Recieving data from database @anastasija
 
@@ -11,7 +17,7 @@ from scipy.spatial.distance import pdist, squareform
 data = {
     'FirstName': ['Anastasija', 'Bodan', 'Cjordan'],
     'LastName': ['Smith', 'Doe', 'Brown'],
-    'Bio' : ["I love listening to rap music", "I playing ", "Basketball for life"], # TODO ChatGPT Bio similarity comparison @anja
+    'Bio' : ["I love listening to rap music", "I love playing voleyball", "Basketball for life"], # TODO ChatGPT Bio similarity comparison @anja
     'Age': [25, 30, 35],
     'Faculty': ["CS", "EE", "Art"],
     'FacultyYear': [1, 3, 2],
@@ -179,6 +185,47 @@ jaccard_similarity = 1 - squareform(jaccard_distances)  # Convert distance to si
 user_hobby_sim = pd.DataFrame(jaccard_similarity, index=df['FirstName'], columns=df['FirstName'])
 
 # print(user_hobby_sim)
+
+# BIO HANDELING
+
+def get_bio_similarity(bio1, bio2, model="gpt-4"):
+    """Get bio similarity using OpenAI's chat completion."""
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": "Calculate the similarity between two bios and respond only with a float from 0-1."},
+                {"role": "user", "content": bio1},
+                {"role": "user", "content": bio2}
+            ]
+        )
+        response_text = response.choices[0].message.content
+        print(response_text)
+
+        match = re.search(r'\b\d+\.\d+\b', response_text) # Find float in the response
+        if match:
+            return float(match.group(0))
+        else:
+            print("No float found in response.")
+            return 0
+    except Exception as e:
+        print(f"Error in fetching similarity: {e}")
+        return 0
+    
+def calculate_bio_similarity(df):
+    """Calculate bio similarity matrix using OpenAI completions."""
+    n = len(df)
+    bio_similarity = np.zeros((n, n))
+    
+    for i in range(n):
+        for j in range(i + 1, n):
+            sim = get_bio_similarity(df.iloc[i]['Bio'], df.iloc[j]['Bio'])
+            bio_similarity[i][j] = bio_similarity[j][i] = sim
+
+    return pd.DataFrame(bio_similarity, index=df['FirstName'], columns=df['FirstName'])
+
+bio_similarity_df = calculate_bio_similarity(df)
+# print(bio_similarity_df)
 
 ### COMBINING MATRICES FOR END RESULT
 
