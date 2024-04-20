@@ -24,9 +24,12 @@ body {
   padding: 4px 10px;
   transition: background-color 0.1s;
   font-size: 18px;
+  text-decoration: none;
+  box-shadow: $button-box-shadow;
 
   &:hover {
     background-color: $tertiary-color-hover;
     border-color: $tertiary-color-hover;
+    color: $primary-color;
   }
 }

@@ -17,7 +17,7 @@
     margin-top: 20px;
     border-radius: 60px;
     border-color: 1px solid $weak-gray;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: $primary-box-shadow;
     transition: width 0.5s ease;
 
     .cndr-header-item {
