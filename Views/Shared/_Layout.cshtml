@@ -21,8 +21,18 @@
         <header class="cndr-header">
             <div class="cndr-header-container">
                 <div class="cndr-header-item">
-                    <a class="cndr-black-color" asp-area="" asp-controller="Home" asp-action="Index">
+                    <a class="cndr-black-color" id="home" asp-area="" asp-controller="Home" asp-action="Index">
                         <ion-icon class="cndr-icon" name="home"></ion-icon>
+                    </a>
+                </div>
+                <div class="cndr-header-item">
+                    <a class="cndr-black-color" id="register" asp-area="Identity" asp-page="/Account/Register">
+                        <ion-icon name="person-add" class="cndr-icon"></ion-icon>
+                    </a>
+                </div>
+                <div class="cndr-header-item">
+                    <a class="cndr-black-color" id="login" asp-area="Identity" asp-page="/Account/Login">
+                        <ion-icon class="cndr-icon" name="log-in"></ion-icon>
                     </a>
                 </div>
             </div>
@@ -47,16 +57,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const header = document.querySelector('.cndr-header-container');
-            const link = header.querySelector('.cndr-header-item a'); // Assuming there's only one link in your header
-            const originalContent = link.innerHTML; // Save the original content (ionicon)
+            const homeLink = header.querySelector('#home');
+            const registerLink = header.querySelector('#register');
+            const loginLink = header.querySelector('#login');
+
+            // Save the original content (ionicons)
+            const homeOriginal = homeLink.innerHTML;
+            const registerOriginal = registerLink.innerHTML;
+            const loginOriginal = loginLink.innerHTML;
 
             window.addEventListener('scroll', function () {
                 if (window.scrollY > 50) {
+                    // Shrinking/Expanding animation
                     header.classList.add('wide-cndr-header-container');
-                    link.innerHTML = 'Home'; // Change to text when scrolled
+                    // Change to text when scrolled
+                    homeLink.innerHTML = 'Home';
+                    registerLink.innerHTML = 'Register';
+                    loginLink.innerHTML = 'Login';
                 } else {
+                    // Shrinking/Expanding animation
                     header.classList.remove('wide-cndr-header-container');
-                    link.innerHTML = originalContent; // Revert to the original ionicon
+                    // Revert to the original ionicons
+                    homeLink.innerHTML = homeOriginal;
+                    registerLink.innerHTML = registerOriginal;
+                    loginLink.innerHTML = loginOriginal;
                 }
             });
         });
