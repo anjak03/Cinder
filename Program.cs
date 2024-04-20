@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Cinder.Data;
 using Microsoft.AspNetCore.Identity;
 using Cinder.Models;
+using Cinder.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationContext>(options =>
@@ -22,6 +23,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSassCompiler();
 
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+    DbInitializer.Initialize(context);
+}
+
+//ova var scope znaci deka ke se ozvede ovoj kod sekoj pat i deka tuka ke se kreiraat rolesot i userot najcesto se prai admin
+using(var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+    var context = serviceProvider.GetRequiredService<ApplicationContext>();
+
+    await UserSeeder.SeedRolesAsync(roleManager);
+    //await UserSeeder.SeedUsersAsync(userManager);
+    LanguageSeeder.SeedAllLanguages(context);
+    FacultySeeder.SeedAllFaculties(context);
+    HobbySeeder.SeedAllHobbies(context);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
