@@ -1,3 +1,15 @@
-
+.cndr-footer {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 10px;
+  border-top: 1px solid rgb(177, 177, 177);
+}
+.cndr-footer .cndr-footer-container {
+  margin: 20px 0;
+}
 
 /*# sourceMappingURL=footer.css.map */
