@@ -22,7 +22,11 @@ data = {
     'Smoker': [False, False, True],
     'Pets': [True, False, True],
     'Languages': [['English', 'Spanish'], ['Dutch'], ['Spanish', 'German', 'English']],
-    'Hobbies' : ["sport", "kafana", "muzika"]
+    'Hobbies': [
+        ["Reading", "Coding", "Traveling"],
+        ["Gaming", "Hiking", "Traveling"],
+        ["Cooking", "Traveling", "Reading"]
+    ]
 }
 
 df = pd.DataFrame(data)
@@ -47,7 +51,7 @@ boolean_distance_matrix = distance.pdist(df[boolean_attributes], metric=weighted
 boolean_distance_df = pd.DataFrame(squareform(boolean_distance_matrix), index=df['FirstName'], columns=df['FirstName'])
 user_boolean_sim = 1 / (1 + boolean_distance_df)
 
-print(user_boolean_sim)
+# print(user_boolean_sim)
 
 # NUMERICAL ATRIBUTES HANDELING
 
@@ -148,17 +152,50 @@ for i in df['FirstName']:
 
 # print(user_faculty_sim)
 
+# HOBBY HANDELING
+
+# TODO Izvući ovo iz baze @anastasija
+
+# List of all possible hobbies
+all_hobbies = [
+    "Reading", "Writing", "Coding", "Playing an instrument", "Drawing",
+    "Cooking", "Gaming", "Hiking", "Photography", "Traveling", "Painting",
+    "Gardening", "Playing sports", "Fishing", "Watching movies",
+    "Listening to music", "Yoga", "Meditation", "Crafting", "Knitting",
+    "Collecting", "Volunteering", "Learning a new language", "Birdwatching",
+    "Astronomy", "Model building", "DIY Projects", "Geocaching", "Surfing",
+    "Scuba diving"
+]
+
+for hobby in all_hobbies:
+    df[hobby] = df['Hobbies'].apply(lambda x: int(hobby in x))
+df.drop('Hobbies', axis=1, inplace=True)
+
+# Calculate the Jaccard similarity
+jaccard_distances = pdist(df[all_hobbies], metric='jaccard')
+jaccard_similarity = 1 - squareform(jaccard_distances)  # Convert distance to similarity
+
+# Convert the condensed similarity matrix to a DataFrame
+user_hobby_sim = pd.DataFrame(jaccard_similarity, index=df['FirstName'], columns=df['FirstName'])
+
+# print(user_hobby_sim)
 
 ### COMBINING MATRICES FOR END RESULT
 
-weights = {'boolean' : 2, 'numerical' : 1, 'faculty': 1, 'language': 0.5 }
+weights = {'boolean'  : 2,    # smoking, pets, is working
+           'numerical': 1,    # 
+           'faculty'  : 1, 
+           'language' : 0.5,
+           'hobby'    : 2
+           }
 total_weight = sum(weights.values())
 normalized_weights = {key: value / total_weight for key, value in weights.items()}
 
 combined_similarity_df = (user_boolean_sim * normalized_weights['boolean'] +
                           user_numerical_sim * normalized_weights['numerical'] +
                           user_faculty_sim * normalized_weights['faculty'] +
-                          user_language_sim * normalized_weights['language']
+                          user_language_sim * normalized_weights['language'] +
+                          user_hobby_sim * normalized_weights['hobby'] 
                           )
 
 print(combined_similarity_df)
