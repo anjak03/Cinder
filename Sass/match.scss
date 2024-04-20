@@ -1,5 +1,41 @@
 @import "./variables.scss";
 
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animated {
+  &.left-aligned {
+    animation: slideInFromLeft 1.5s forwards;
+  }
+
+  &.right-aligned {
+    animation: slideInFromRight 1.5s forwards;
+  }
+
+  &.not-aligned {
+    animation: slideInFromLeft 1.5s forwards;
+  }
+}
+
 .main-match-div {
   display: flex;
   flex-direction: column;
@@ -57,12 +93,12 @@
         gap: 40px;
 
         .pmi-info-split {
-            display: flex;
-            flex-direction: column;
+          display: flex;
+          flex-direction: column;
 
-            span {
-                font-weight: bold;
-            }
+          span {
+            font-weight: bold;
+          }
         }
       }
     }

@@ -1,3 +1,33 @@
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animated.left-aligned {
+  animation: slideInFromLeft 1.5s forwards;
+}
+.animated.right-aligned {
+  animation: slideInFromRight 1.5s forwards;
+}
+.animated.not-aligned {
+  animation: slideInFromLeft 1.5s forwards;
+}
+
 .main-match-div {
   display: flex;
   flex-direction: column;

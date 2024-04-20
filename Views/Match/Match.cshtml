@@ -85,7 +85,7 @@
                 @foreach (var room in Model[0].User2.Property.Rooms)
                 {
                     <div class="potential-match-info-with-img">
-                        <div class="potential-match-info-div">
+                        <div class="potential-match-info-div not-aligned">
                             <div class="pmi-visuals">
                                 <h3>Info about the room</h3>
                                 <ion-icon class="pmi-icon" name="bed"></ion-icon>
@@ -143,3 +143,49 @@
         }
     </div>
 </div>
+
+<!-- For sliding into the screen -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const elementsLeft = document.querySelectorAll('.potential-match-info-div.left-aligned, .potential-match-info-with-img img');
+        const elementsRight = document.querySelectorAll('.potential-match-info-div.right-aligned, .potential-match-info-with-img img');
+        const elementsNotAligned = document.querySelectorAll('.potential-match-info-div.not-aligned, .potential-match-info-with-img img');
+
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observerLeft = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated', 'left-aligned');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        const observerRight = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated', 'right-aligned');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        const observerNotAligned = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated', 'not-aligned');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        elementsLeft.forEach(el => observerLeft.observe(el));
+        elementsRight.forEach(el => observerRight.observe(el));
+        elementsNotAligned.forEach(el => observerNotAligned.observe(el))
+    });
+</script>
