@@ -21,7 +21,8 @@
     box-shadow: $primary-box-shadow;
 
     #account,
-    #registerForm {
+    #registerForm,
+    #completeProfile {
       display: flex;
       flex-direction: column;
       gap: 20px 0;
@@ -36,6 +37,7 @@
 
       .form-floating {
         position: relative;
+
         label.form-label {
           position: absolute;
           top: 25%;

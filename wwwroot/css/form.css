@@ -18,25 +18,29 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 .cndr-main-login-register-container .form-container #account,
-.cndr-main-login-register-container .form-container #registerForm {
+.cndr-main-login-register-container .form-container #registerForm,
+.cndr-main-login-register-container .form-container #completeProfile {
   display: flex;
   flex-direction: column;
   gap: 20px 0;
   max-width: 308.5px;
 }
 .cndr-main-login-register-container .form-container #account > *,
-.cndr-main-login-register-container .form-container #registerForm > * {
+.cndr-main-login-register-container .form-container #registerForm > *,
+.cndr-main-login-register-container .form-container #completeProfile > * {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
 }
 .cndr-main-login-register-container .form-container #account .form-floating,
-.cndr-main-login-register-container .form-container #registerForm .form-floating {
+.cndr-main-login-register-container .form-container #registerForm .form-floating,
+.cndr-main-login-register-container .form-container #completeProfile .form-floating {
   position: relative;
 }
 .cndr-main-login-register-container .form-container #account .form-floating label.form-label,
-.cndr-main-login-register-container .form-container #registerForm .form-floating label.form-label {
+.cndr-main-login-register-container .form-container #registerForm .form-floating label.form-label,
+.cndr-main-login-register-container .form-container #completeProfile .form-floating label.form-label {
   position: absolute;
   top: 25%;
   left: 50%;
@@ -46,25 +50,30 @@
   font-size: 0.85rem;
 }
 .cndr-main-login-register-container .form-container #account .form-floating input.form-control,
-.cndr-main-login-register-container .form-container #registerForm .form-floating input.form-control {
+.cndr-main-login-register-container .form-container #registerForm .form-floating input.form-control,
+.cndr-main-login-register-container .form-container #completeProfile .form-floating input.form-control {
   text-align: center;
 }
 .cndr-main-login-register-container .form-container #account div #login-submit,
-.cndr-main-login-register-container .form-container #registerForm div #login-submit {
+.cndr-main-login-register-container .form-container #registerForm div #login-submit,
+.cndr-main-login-register-container .form-container #completeProfile div #login-submit {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
 }
 .cndr-main-login-register-container .form-container #account div .checkbox .form-label .form-check-input:checked,
-.cndr-main-login-register-container .form-container #registerForm div .checkbox .form-label .form-check-input:checked {
+.cndr-main-login-register-container .form-container #registerForm div .checkbox .form-label .form-check-input:checked,
+.cndr-main-login-register-container .form-container #completeProfile div .checkbox .form-label .form-check-input:checked {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
 }
 .cndr-main-login-register-container .form-container #account div p a,
-.cndr-main-login-register-container .form-container #registerForm div p a {
+.cndr-main-login-register-container .form-container #registerForm div p a,
+.cndr-main-login-register-container .form-container #completeProfile div p a {
   color: #0081f2;
 }
 .cndr-main-login-register-container .form-container #account div div .form-check,
-.cndr-main-login-register-container .form-container #registerForm div div .form-check {
+.cndr-main-login-register-container .form-container #registerForm div div .form-check,
+.cndr-main-login-register-container .form-container #completeProfile div div .form-check {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -74,7 +83,9 @@
 .cndr-main-login-register-container .form-container #account div div .form-check:checked,
 .cndr-main-login-register-container .form-container #account div div .form-check-input:checked,
 .cndr-main-login-register-container .form-container #registerForm div div .form-check:checked,
-.cndr-main-login-register-container .form-container #registerForm div div .form-check-input:checked {
+.cndr-main-login-register-container .form-container #registerForm div div .form-check-input:checked,
+.cndr-main-login-register-container .form-container #completeProfile div div .form-check:checked,
+.cndr-main-login-register-container .form-container #completeProfile div div .form-check-input:checked {
   background-color: rgb(0, 0, 0);
   border-color: rgb(0, 0, 0);
 }

@@ -31,6 +31,11 @@
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <div class="cndr-header-item">
+                        <a class="cndr-black-color" id="home" asp-area="" asp-controller="Home" asp-action="Index">
+                            <ion-icon class="cndr-icon" name="home"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
                         <a id="messages" class="cndr-black-color" asp-area="" asp-controller="ViewMessages"
                             asp-action="Messages">
                             <ion-icon class="cndr-icon" name="mail"></ion-icon>
@@ -115,6 +120,9 @@
             let matchMeOriginal = undefined;
             let manageOriginal = undefined;
             let logoutOriginal = undefined;
+
+            homeLink = header.querySelector('#home');
+            homeOriginal = homeLink.innerHTML;
             // Not logged in
             if (isLoggedIn) {
                 messagesLink = header.querySelector('#messages');
@@ -128,11 +136,9 @@
                 logoutOriginal = logoutLink.innerHTML;
             } else {
                 // Logged in
-                homeLink = header.querySelector('#home');
                 registerLink = header.querySelector('#register');
                 loginLink = header.querySelector('#login');
                 // Save the original content (ionicons)
-                homeOriginal = homeLink.innerHTML;
                 registerOriginal = registerLink.innerHTML;
                 loginOriginal = loginLink.innerHTML;
             }
@@ -142,13 +148,13 @@
                     // Shrinking/Expanding animation
                     header.classList.add('wide-cndr-header-container');
                     // Change to text when scrolled
+                    homeLink.innerHTML = 'Home';
                     if (isLoggedIn) {
                         messagesLink.innerHTML = 'Messages';
                         matchMeLink.innerHTML = 'Match Me';
                         manageLink.innerHTML = 'Hello, ' + userName + '!';
                         logoutLink.innerHTML = 'Logout';
                     } else {
-                        homeLink.innerHTML = 'Home';
                         registerLink.innerHTML = 'Register';
                         loginLink.innerHTML = 'Login';
                     }
@@ -156,13 +162,13 @@
                     // Shrinking/Expanding animation
                     header.classList.remove('wide-cndr-header-container');
                     // Revert to the original ionicons
+                    homeLink.innerHTML = homeOriginal;
                     if (isLoggedIn) {
                         messagesLink.innerHTML = messagesOriginal;
                         matchMeLink.innerHTML = matchMeOriginal;
                         manageLink.innerHTML = manageOriginal;
                         logoutLink.innerHTML = logoutOriginal;
                     } else {
-                        homeLink.innerHTML = homeOriginal;
                         registerLink.innerHTML = registerOriginal;
                         loginLink.innerHTML = loginOriginal;
                     }
