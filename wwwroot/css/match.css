@@ -1,0 +1,80 @@
+.main-match-div {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+.main-match-div .all-potential-view-info-div {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-with-img {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-with-img img {
+  max-width: 100%;
+  height: auto;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid rgb(177, 177, 177);
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div .pmi-visuals {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div .pmi-visuals .pmi-icon {
+  font-size: 30px;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div .pmi-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div .pmi-info .pmi-info-split {
+  display: flex;
+  flex-direction: column;
+}
+.main-match-div .all-potential-view-info-div .potential-match-info-div .pmi-info .pmi-info-split span {
+  font-weight: bold;
+}
+.main-match-div .all-potential-view-info-div .left-aligned {
+  width: 45%;
+  margin-right: auto;
+  margin-left: 0;
+}
+.main-match-div .all-potential-view-info-div .right-aligned {
+  width: 45%;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+#best-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+/*# sourceMappingURL=match.css.map */
