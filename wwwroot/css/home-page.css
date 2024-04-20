@@ -1,0 +1,33 @@
+#cndr-home-page-introduction {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 15px;
+}
+#cndr-home-page-introduction h1 {
+  font-size: 50px;
+  font-weight: bold;
+}
+#cndr-home-page-introduction h2 {
+  font-size: 26px;
+}
+
+#register-now-home-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.cndr-main-home-page-container {
+  display: flex;
+  flex-direction: column;
+  margin: 30px;
+}
+.cndr-main-home-page-container .cndr-home-page-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+}
+
+/*# sourceMappingURL=home-page.css.map */

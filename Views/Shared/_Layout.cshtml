@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home-page.css" asp-append-version="true" />
 </head>
 
 <body>
@@ -27,7 +28,9 @@
             </div>
         </header>
         <main role="main" class="pb-3">
-            @RenderBody()
+            <div class="cndr-main-home-page-container">
+                @RenderBody()
+            </div>
         </main>
     </div>
 

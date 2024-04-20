@@ -14,3 +14,19 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+.cndr-tertiary-button {
+  background-color: $tertiary-color;
+  border-color: $tertiary-color;
+  border-radius: 5px;
+  color: $primary-color;
+  font-weight: bold;
+  padding: 4px 10px;
+  transition: background-color 0.1s;
+  font-size: 18px;
+
+  &:hover {
+    background-color: $tertiary-color-hover;
+    border-color: $tertiary-color-hover;
+  }
+}
