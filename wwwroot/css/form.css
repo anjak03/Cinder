@@ -23,6 +23,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px 0;
+  max-width: 308.5px;
 }
 .cndr-main-login-register-container .login-container #account > *,
 .cndr-main-login-register-container .login-container #registerForm > *, .cndr-main-login-register-container .register-container #account > *,
