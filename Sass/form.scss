@@ -1,0 +1,92 @@
+@import "./variables.scss";
+
+.cndr-main-login-register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+    .login-container {
+        margin-top: 50px;
+    }
+
+  .login-container, .register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    padding: 50px 0;
+    border: 1px solid $weaker-gray;
+    border-radius: 40px;
+    box-shadow: $primary-box-shadow;
+
+    #account,
+    #registerForm {
+      display: flex;
+      flex-direction: column;
+      gap: 20px 0;
+
+      > * {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .form-floating {
+        position: relative;
+        label.form-label {
+          position: absolute;
+          top: 25%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          text-align: center;
+          font-size: 0.85rem;
+        }
+
+        input.form-control {
+          text-align: center;
+        }
+      }
+
+      div {
+        #login-submit {
+          background-color: $secondary-color;
+          border-color: $secondary-color;
+        }
+
+        .checkbox {
+          .form-label {
+            .form-check-input:checked {
+              background-color: $secondary-color;
+              border-color: $secondary-color;
+            }
+          }
+        }
+
+        p {
+          a {
+            color: $tertiary-color;
+          }
+        }
+
+        div {
+          .form-check {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0 10px;
+          }
+
+          .form-check:checked,
+          .form-check-input:checked {
+            background-color: $secondary-color;
+            border-color: $secondary-color;
+          }
+        }
+      }
+    }
+  }
+}
