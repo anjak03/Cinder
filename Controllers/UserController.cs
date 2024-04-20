@@ -2,17 +2,21 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Cinder.Models;
 using Cinder.Data;
-using Cinder.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
 
 namespace Cinder.Controllers;
 
 public class UserController : Controller
 {
+    private readonly HttpClient _httpClient = new HttpClient();
+
     private readonly UserManager<User> _userManager;
     private readonly ApplicationContext _context;
 
@@ -51,7 +55,7 @@ public class UserController : Controller
     //POST: User/CompleteProfile
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CompleteProfile (string id, [Bind("Id,Bio,Age,Id_Faculty,FacultyYear,Sex,Employed,Employment,Smoker,Pets,Id_Language,LeaseDuration,Id_Hobby")] User user){
+    public async Task<IActionResult> CompleteProfile (string id, [Bind("Id,Bio,Age,Id_Faculty,FacultyYear,Sex,Employed,Employment,Smoker,Pets,Id_Language,LeaseDuration,Id_Hobby")] User user){        
         if (id != user.Id)
         {
             return NotFound();
@@ -116,7 +120,53 @@ public class UserController : Controller
 
                     //////////////////////////////////////////////////////
                     //adding users to the Matches table
-                    var users = await _context.Users.Where(u => u.Id != existingUser.Id)
+
+
+
+
+                    
+var allUsers = await GetAllUserData();
+var settings = new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+    // Optionally, you can also set ContractResolver if you want to control which properties get serialized
+    ContractResolver = new CamelCasePropertyNamesContractResolver()
+};
+var allUsersJson = JsonConvert.SerializeObject(allUsers, settings);
+
+
+                    var apiUrl = "http://localhost:5000/recommend";
+                    var content = new StringContent(allUsersJson, Encoding.UTF8, "application/json");
+
+                    
+HttpResponseMessage response = null;
+try
+{
+    response = await _httpClient.PostAsync(apiUrl, content);
+}
+catch (HttpRequestException ex)
+{
+    Console.WriteLine("Error sending data to the Flask API: {0}", ex.Message);
+    return View("Error"); // Make sure to pass an appropriate error message or model to the view
+}
+
+if (response.IsSuccessStatusCode)
+{
+    var responseJson = await response.Content.ReadAsStringAsync();
+    var recommendations = JsonConvert.DeserializeObject<dynamic>(responseJson);
+    //Console.WriteLine("Recommendations received: {0}", recommendations);
+    
+    // Additional logic to handle the recommendations
+    // ...
+
+    return RedirectToAction("Success");
+}
+else
+{
+    Console.WriteLine("Flask API call failed with status code {0}", response.StatusCode);
+    return View("Error"); // Again, pass an appropriate error message or model
+}
+                    /*var users = await _context.Users.Where(u => u.Id != existingUser.Id)
                                                        .ToListAsync();
 
                     var currentUserRole = (await _userManager.GetRolesAsync(existingUser)).FirstOrDefault();
@@ -167,7 +217,7 @@ public class UserController : Controller
                                 _context.Matches.Add(match2);
                             }
                         }
-                    }
+                    }*/
 
 
                     await _context.SaveChangesAsync();
@@ -187,6 +237,17 @@ public class UserController : Controller
 
     }
 
+    private async Task<List<User>> GetAllUserData()
+{
+    // Eager load related data to include in serialization if necessary
+    var users = await _context.Users
+                              .Include(u => u.UserLanguages)
+                              // ... any other includes if necessary
+                              .ToListAsync();
+    return users;
+}
+
+
 [Authorize]
     public async Task<IActionResult> MatchedUsers()
     {
@@ -199,4 +260,5 @@ public class UserController : Controller
             .ToListAsync();
 
         return View(matchedUsers);
-    }}
+    }    
+}
