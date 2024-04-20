@@ -1,4 +1,4 @@
-namespace SaveThePlate.Models;
+namespace Cinder.Models;
 
 public class ErrorViewModel
 {

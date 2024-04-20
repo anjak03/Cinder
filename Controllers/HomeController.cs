@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using SaveThePlate.Models;
+using Cinder.Models;
 
-namespace SaveThePlate.Controllers;
+namespace Cinder.Controllers;
 
 public class HomeController : Controller
 {
