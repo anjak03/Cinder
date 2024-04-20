@@ -16,16 +16,15 @@
 </head>
 
 <body>
-    <header class="stp-header">
-        <div class="stp-header-container">
-            <div class="stp-header-item">
-                <a class="stp-white-bold-text" asp-area="" asp-controller="Home" asp-action="Index">Cinder</a>
+    <header class="cndr-header">
+        <div class="cndr-header-container">
+            <div class="cndr-header-item">
+                <a class="cndr-black-bold-text" asp-area="" asp-controller="Home" asp-action="Index"><ion-icon
+                        name="heart"></ion-icon>
+                </a>
             </div>
-            <div class="stp-header-item">
-                <a class="stp-white-bold-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </div>
-            <div class="stp-header-item">
-                <a class="stp-white-bold-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="cndr-header-item">
+                <a class="cndr-black-bold-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
         </div>
     </header>
@@ -43,6 +42,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

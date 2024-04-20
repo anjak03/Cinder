@@ -1,16 +1,16 @@
-@import './variables.scss';
+@import "./variables.scss";
 
-.stp-white-bold-text {
-    color: $full-white;
-    font-weight: bold;
+.cndr-black-bold-text {
+  color: $secondary-color;
+  font-weight: bold;
 }
 
 .main-body-container {
-    flex: 1;
+  flex: 1;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
