@@ -3,4 +3,14 @@
   font-weight: bold;
 }
 
+.main-body-container {
+  flex: 1;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /*# sourceMappingURL=main.css.map */
