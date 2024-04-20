@@ -9,6 +9,7 @@ from scipy.spatial.distance import pdist, squareform
 
 # Sample data
 data = {
+    'id' : [0, 1, 2],
     'FirstName': ['Anastasija', 'Bodan', 'Cjordan'],
     'LastName': ['Smith', 'Doe', 'Brown'],
     'Bio' : ["I love listening to rap music", "I playing ", "Basketball for life"], # TODO ChatGPT Bio similarity comparison @anja
@@ -30,6 +31,7 @@ data = {
 }
 
 df = pd.DataFrame(data)
+df.set_index('id', inplace=True)
 
 # BOOLEAN ATRIBUTES HANDELING
 
@@ -48,8 +50,9 @@ def weighted_hamming_distance(x, y):
 
 # Apply the custom distance function
 boolean_distance_matrix = distance.pdist(df[boolean_attributes], metric=weighted_hamming_distance)
-boolean_distance_df = pd.DataFrame(squareform(boolean_distance_matrix), index=df['FirstName'], columns=df['FirstName'])
+boolean_distance_df = pd.DataFrame(squareform(boolean_distance_matrix), index=df.index, columns=df.index)
 user_boolean_sim = 1 / (1 + boolean_distance_df)
+
 
 # print(user_boolean_sim)
 
@@ -61,8 +64,9 @@ df[numerical_attributes] = scaler.fit_transform(df[numerical_attributes])
 
 # Calculate the Euclidean distance matrix for numerical attributes
 numerical_distance_matrix = distance.cdist(df[numerical_attributes], df[numerical_attributes], 'euclidean')
-numerical_distance_df = pd.DataFrame(numerical_distance_matrix, index=df['FirstName'], columns=df['FirstName'])
+numerical_distance_df = pd.DataFrame(numerical_distance_matrix, index=df.index, columns=df.index)
 numerical_similarity_df = 1 / (1 + numerical_distance_df)
+
 
 
 # Normalize/Standardize numeric columns
@@ -70,7 +74,7 @@ df[['Age', 'FacultyYear', 'Employed', 'Smoker', 'Pets']] = scaler.fit_transform(
 
 # Calculate the distance matrix
 distance_matrix = distance.cdist(df[['Age', 'FacultyYear', 'Employed', 'Smoker', 'Pets']], df[['Age', 'FacultyYear', 'Employed', 'Smoker', 'Pets']], 'euclidean')
-distance_df = pd.DataFrame(distance_matrix, index=df['FirstName'], columns=df['FirstName'])
+distance_df = pd.DataFrame(distance_matrix, index=df.index, columns=df.index)
 user_numerical_sim = 1 / (1 + distance_df)
 
 # print(user_numerical_sim)
@@ -89,8 +93,9 @@ language_columns = list(languages)  # Assuming 'languages' contains all language
 jaccard_distances = pdist(df[language_columns], metric='jaccard')
 
 # Convert the condensed distance matrix to a square matrix and then a DataFrame
-user_language_dist_matrix = pd.DataFrame(squareform(jaccard_distances), index=df['FirstName'], columns=df['FirstName'])
+user_language_dist_matrix = pd.DataFrame(squareform(jaccard_distances), index=df.index, columns=df.index)
 user_language_sim = 1 - user_language_dist_matrix
+
 
 # print(user_language_sim)
 
@@ -143,12 +148,13 @@ for i in faculties['Faculty']:
 
 # print(faculty_similarity_matrix)
 
-user_faculty_sim = pd.DataFrame(0, index=df['FirstName'], columns=df['FirstName'])
-for i in df['FirstName']:
-    for j in df['FirstName']:
-        fac1 = df[df['FirstName'] == i]['Faculty'].values[0]
-        fac2 = df[df['FirstName'] == j]['Faculty'].values[0]
+user_faculty_sim = pd.DataFrame(0, index=df.index, columns=df.index)
+for i in df.index:
+    for j in df.index:
+        fac1 = df.at[i, 'Faculty']
+        fac2 = df.at[j, 'Faculty']
         user_faculty_sim.at[i, j] = faculty_similarity_matrix.at[fac1, fac2]
+
 
 # print(user_faculty_sim)
 
@@ -176,7 +182,8 @@ jaccard_distances = pdist(df[all_hobbies], metric='jaccard')
 jaccard_similarity = 1 - squareform(jaccard_distances)  # Convert distance to similarity
 
 # Convert the condensed similarity matrix to a DataFrame
-user_hobby_sim = pd.DataFrame(jaccard_similarity, index=df['FirstName'], columns=df['FirstName'])
+user_hobby_sim = pd.DataFrame(jaccard_similarity, index=df.index, columns=df.index)
+
 
 # print(user_hobby_sim)
 
@@ -198,27 +205,44 @@ combined_similarity_df = (user_boolean_sim * normalized_weights['boolean'] +
                           user_hobby_sim * normalized_weights['hobby'] 
                           )
 
-print(combined_similarity_df)
+# print(combined_similarity_df)
 
-
-def get_best_matches(user_name, combined_similarity_df):
-    # Ensure the user exists in the DataFrame
-    if user_name not in combined_similarity_df.index:
+def get_best_matches(user_id, combined_similarity_df, num_matches=3):
+    if user_id not in combined_similarity_df.index:
         return "User not found."
 
-    # Get the similarity scores for the given user
-    user_similarities = combined_similarity_df[user_name]
+    # Retrieve the similarity scores for the given user
+    user_similarities = combined_similarity_df.loc[user_id]
 
     # Drop the user's own entry to exclude them from their matches
-    user_similarities = user_similarities.drop(user_name)
+    user_similarities = user_similarities.drop(user_id)
 
     # Sort the remaining users by similarity score in descending order
-    best_matches = user_similarities.sort_values(ascending=False)
+    best_matches = user_similarities.sort_values(ascending=False).head(num_matches)
 
-    return best_matches
+    # Convert the Series to a list of tuples (user_id, score)
+    best_matches_list = list(best_matches.items())
+
+    return best_matches_list
+
+def get_all_user_preferences(combined_similarity_df, num_matches=3):
+    # Initialize an empty list to store preferences for each user
+    all_preferences = []
+    
+    # Iterate over each user ID in the DataFrame index
+    for user_id in combined_similarity_df.index:
+        # Get the best matches for the current user
+        best_matches = get_best_matches(user_id, combined_similarity_df, num_matches)
+        
+        # Append the list of best matches (list of tuples) to the overall list
+        all_preferences.append(best_matches)
+    
+    return all_preferences
 
 # Example usage:
-user_name = 'Anastasija'
-best_matches = get_best_matches(user_name, combined_similarity_df)
-print(f"Best matches for {user_name}:")
-print(best_matches)
+all_user_preferences = get_all_user_preferences(combined_similarity_df)
+for idx, preferences in enumerate(all_user_preferences):
+    print(f"Preferences for User ID {idx}:")
+    for match in preferences:
+        print(f"    ID: {match[0]}, Score: {match[1]:.4f}")
+    print()  # Adds a newline for better separation of output
