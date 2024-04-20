@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Cinder</title>
+    <title>Cinder</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Cinder.styles.css" asp-append-version="true" />
@@ -13,36 +13,82 @@
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home-page.css" asp-append-version="true" />
+    <!-- Login and Register styles -->
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
 </head>
 
 <body>
-    <header class="stp-header">
-        <div class="stp-header-container">
-            <div class="stp-header-item">
-                <a class="stp-white-bold-text" asp-area="" asp-controller="Home" asp-action="Index">Cinder</a>
-            </div>
-            <div class="stp-header-item">
-                <a class="stp-white-bold-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </div>
-            <div class="stp-header-item">
-                <a class="stp-white-bold-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </div>
-    </header>
     <div class="main-body-container">
+        <header class="cndr-header">
+            <div class="cndr-header-container">
+                <div class="cndr-header-item">
+                    <a class="cndr-black-color" id="home" asp-area="" asp-controller="Home" asp-action="Index">
+                        <ion-icon class="cndr-icon" name="home"></ion-icon>
+                    </a>
+                </div>
+                <div class="cndr-header-item">
+                    <a class="cndr-black-color" id="register" asp-area="Identity" asp-page="/Account/Register">
+                        <ion-icon name="person-add" class="cndr-icon"></ion-icon>
+                    </a>
+                </div>
+                <div class="cndr-header-item">
+                    <a class="cndr-black-color" id="login" asp-area="Identity" asp-page="/Account/Login">
+                        <ion-icon class="cndr-icon" name="log-in"></ion-icon>
+                    </a>
+                </div>
+            </div>
+        </header>
         <main role="main" class="pb-3">
-            @RenderBody()
+            <div class="cndr-main-home-page-container">
+                @RenderBody()
+            </div>
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Cinder - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="cndr-footer">
+        <div class="cndr-footer-container">
+            &copy; 2024 - Cinder
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = document.querySelector('.cndr-header-container');
+            const homeLink = header.querySelector('#home');
+            const registerLink = header.querySelector('#register');
+            const loginLink = header.querySelector('#login');
+
+            // Save the original content (ionicons)
+            const homeOriginal = homeLink.innerHTML;
+            const registerOriginal = registerLink.innerHTML;
+            const loginOriginal = loginLink.innerHTML;
+
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    // Shrinking/Expanding animation
+                    header.classList.add('wide-cndr-header-container');
+                    // Change to text when scrolled
+                    homeLink.innerHTML = 'Home';
+                    registerLink.innerHTML = 'Register';
+                    loginLink.innerHTML = 'Login';
+                } else {
+                    // Shrinking/Expanding animation
+                    header.classList.remove('wide-cndr-header-container');
+                    // Revert to the original ionicons
+                    homeLink.innerHTML = homeOriginal;
+                    registerLink.innerHTML = registerOriginal;
+                    loginLink.innerHTML = loginOriginal;
+                }
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

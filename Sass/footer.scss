@@ -1,0 +1,16 @@
+@import './variables.scss';
+
+.cndr-footer {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 10px;
+    border-top: 1px solid $weaker-gray;
+
+    .cndr-footer-container {
+        margin: 20px 0;
+    }
+}

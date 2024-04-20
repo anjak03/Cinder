@@ -1,26 +1,51 @@
 @import "./variables.scss";
 
-.stp-header {
+.cndr-header {
   display: flex;
   justify-content: center;
+  top: 0;
+  position: sticky;
+  z-index: 1;
 
-  .stp-header-container {
+  .cndr-header-container {
     background-color: $primary-color;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    width: 40vw;
+    min-width: 20vw;
+    width: 20vw;
     margin-top: 20px;
     border-radius: 60px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-color: 1px solid $weak-gray;
+    box-shadow: $primary-box-shadow;
+    transition: width 0.5s ease;
 
-    .stp-header-item {
+    .cndr-header-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        a {
-            text-decoration: none;
-            line-height: 50px;
-            font-size: 18px;
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        padding: 10px 0;
+        font-size: 18px;
+        font-weight: bold;
+
+        .cndr-icon {
+          font-size: 26px;
         }
+
+        :hover {
+          color: $tertiary-color-hover;
+        }
+      }
     }
+  }
+
+  .wide-cndr-header-container {
+    width: 40vw;
   }
 }
