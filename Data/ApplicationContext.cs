@@ -10,6 +10,7 @@ namespace Cinder.Data
 {
     public class ApplicationContext : IdentityDbContext<User>
     {
+        public DbSet<Message> Messages {get; set;}
         public DbSet<Language> Languages { get; set; }
         public DbSet<Faculty> Faculties {get; set;}
         public DbSet<Hobby> Hobbies {get; set;} 
@@ -28,6 +29,18 @@ namespace Cinder.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Message>()
+                .HasOne<User>(m => m.Sender)
+                .WithMany() 
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Message>()
+                .HasOne<User>(m => m.Receiver)
+                .WithMany()
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<UserLanguage>()
                 .HasKey(ul => new { ul.UserId, ul.LanguageId });
