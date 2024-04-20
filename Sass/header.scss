@@ -3,6 +3,9 @@
 .cndr-header {
   display: flex;
   justify-content: center;
+  top: 0;
+  position: sticky;
+  z-index: 1;
 
   .cndr-header-container {
     background-color: $primary-color;
@@ -10,10 +13,12 @@
     flex-direction: row;
     justify-content: space-evenly;
     min-width: 20vw;
+    width: 20vw;
     margin-top: 20px;
     border-radius: 60px;
     border-color: 1px solid $weak-gray;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: width 0.5s ease;
 
     .cndr-header-item {
       display: flex;
@@ -25,8 +30,9 @@
         justify-content: center;
         align-items: center;
         text-decoration: none;
-        line-height: 50px;
         padding: 10px 0;
+        font-size: 18px;
+        font-weight: bold;
 
         .cndr-icon {
           font-size: 26px;
@@ -37,5 +43,9 @@
         }
       }
     }
+  }
+
+  .wide-cndr-header-container {
+    width: 40vw;
   }
 }
