@@ -6,10 +6,10 @@
 }
 
 <div class="cndr-main-login-register-container">
-    <div class="login-container">
+    <div class="login-container form-container">
         <h1>@ViewData["Title"]</h1>
         <form id="account" method="post">
-            <h2>Use an account to log in.</h2>
+            <h2 style="text-align: center;">Use an account to log in.</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
                 <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
