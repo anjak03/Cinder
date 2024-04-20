@@ -1,17 +1,8 @@
 @model List<Cinder.Models.Match>
 
-@* @{
-// Retrieve the currentIndex from the query parameters
-int currentIndex = Context.Request.Query["currentIndex"].FirstOrDefault() != null
-? int.Parse(Context.Request.Query["currentIndex"].FirstOrDefault())
-: 0;
-
-} *@
-
-
 <section id="welcome" class="o_nama">
     <h1>Let's match with other users!</h1>
-</section><!-- end welcome -->
+</section>
 
 <section id="matchSection">
 
@@ -115,5 +106,5 @@ int currentIndex = Context.Request.Query["currentIndex"].FirstOrDefault() != nul
                 </form>
             }
         </div>
-    </div><!-- end main-match-div -->
+    </div>
 </section>
