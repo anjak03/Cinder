@@ -230,10 +230,10 @@ bio_similarity_df = calculate_bio_similarity(df)
 ### COMBINING MATRICES FOR END RESULT
 
 weights = {'boolean'  : 2,    # smoking, pets, is working
-           'numerical': 1,    # 
-           'faculty'  : 1, 
-           'language' : 0.5,
-           'hobby'    : 2
+           'numerical': 1,    # age, faculty year
+           'faculty'  : 1,    # faculty similarity
+           'language' : 0.5,  # language jaccard
+           'hobby'    : 2     # hobby jaccard
            }
 total_weight = sum(weights.values())
 normalized_weights = {key: value / total_weight for key, value in weights.items()}
@@ -246,3 +246,26 @@ combined_similarity_df = (user_boolean_sim * normalized_weights['boolean'] +
                           )
 
 print(combined_similarity_df)
+
+
+def get_best_matches(user_name, combined_similarity_df):
+    # Ensure the user exists in the DataFrame
+    if user_name not in combined_similarity_df.index:
+        return "User not found."
+
+    # Get the similarity scores for the given user
+    user_similarities = combined_similarity_df[user_name]
+
+    # Drop the user's own entry to exclude them from their matches
+    user_similarities = user_similarities.drop(user_name)
+
+    # Sort the remaining users by similarity score in descending order
+    best_matches = user_similarities.sort_values(ascending=False)
+
+    return best_matches
+
+# Example usage:
+user_name = 'Anastasija'
+best_matches = get_best_matches(user_name, combined_similarity_df)
+print(f"Best matches for {user_name}:")
+print(best_matches)
