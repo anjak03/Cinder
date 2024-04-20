@@ -7,7 +7,7 @@
 <div class="cndr-main-login-register-container">
     <div class="register-container form-container">
         <h1>@ViewData["Title"]</h1>
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form class="cinder-form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2 style="text-align: center;">Create a new account.</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">

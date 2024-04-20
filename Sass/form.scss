@@ -5,9 +5,9 @@
   align-items: center;
   justify-content: center;
 
-    .login-container {
-        margin-top: 50px;
-    }
+  .login-container {
+    margin-top: 50px;
+  }
 
   .form-container {
     display: flex;
@@ -20,9 +20,11 @@
     border-radius: 40px;
     box-shadow: $primary-box-shadow;
 
-    #account,
-    #registerForm,
-    #completeProfile {
+    .form-header {
+      padding-bottom: 20px;
+    }
+
+    .cinder-form {
       display: flex;
       flex-direction: column;
       gap: 20px 0;
@@ -50,6 +52,31 @@
 
         input.form-control {
           text-align: center;
+        }
+      }
+
+      .select-form-container {
+        display: flex;
+        flex-direction: column;
+
+        .select-form {
+          width: 100%;
+          border-radius: 5px;
+        }
+      }
+
+      .radio-form-floating {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .radio-option {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            line-height: 34px;
         }
       }
 
