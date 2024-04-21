@@ -59,6 +59,16 @@ section#msgIntro {
       overflow-y: auto;
       height: 400px;
       gap: 10px;
+      box-sizing: border-box;
+
+      .sent-message,
+      .received-message {
+        max-width: 60%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        margin-bottom: 10px;
+      }
 
       .sent-message {
         display: inline-block;
@@ -71,6 +81,14 @@ section#msgIntro {
         color: $secondary-color;
         margin-right: 0;
         margin-left: auto;
+      }
+
+      .received-message {
+        display: inline-block;
+        text-align: left;
+        padding: 10px;
+        margin-left: 0;
+        margin-right: auto;
       }
     }
 
