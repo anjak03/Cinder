@@ -1,5 +1,17 @@
 @import "./variables.scss";
 
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
 section#msgIntro {
   text-align: center;
 }
@@ -25,6 +37,7 @@ section#msgIntro {
       border-radius: 10px;
       box-shadow: $button-box-shadow;
       transition: all 0.5s ease;
+      animation: slideFromTop 0.5s ease-out;
 
       &:hover {
         background-color: $tertiary-color-hover;

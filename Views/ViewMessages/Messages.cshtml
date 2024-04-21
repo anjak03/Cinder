@@ -147,6 +147,12 @@
             // Add script for handling user info clicks
             document.querySelectorAll('.user-info').forEach(element => {
                 element.addEventListener('click', function () {
+                    // Reset the animation
+                    this.classList.remove('user-info');
+                    setTimeout(() => {
+                    this.classList.add('user-info');
+                    }, 10); // Short delay before re-adding the class to trigger reflow/repaint
+
                     // Remove the clicked class from all .user-info elements
                     document.querySelectorAll('.user-info.clicked').forEach(clickedElement => {
                         clickedElement.classList.remove('clicked');
