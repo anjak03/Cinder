@@ -26,9 +26,6 @@ def recommend():
 
 def process_user_data(users_data):
 
-    print("INPUT: ")
-    print(users_data)
-
     # Data format used for analyizing
     structured_data = {
         'id': [],
@@ -51,8 +48,6 @@ def process_user_data(users_data):
     try:
         signed_user_id = users_data['existingUserId']
         user_list = users_data['users']
-        print("Element[0]: ")
-        print(signed_user_id)
         for entry in user_list:
             structured_data['id'].append(entry['id'])
             structured_data['FirstName'].append(entry['firstName'])
@@ -237,52 +232,51 @@ def process_user_data(users_data):
 
     # BIO HANDELING
 
-    # def get_bio_similarity(bio1, bio2, model="gpt-4"):
-    #     """Get bio similarity using OpenAI's chat completion."""
-    #     try:
-    #         response = client.chat.completions.create(
-    #             model=model,
-    #             messages=[
-    #                 {"role": "system", "content": "Calculate the similarity between two bios and respond only with a float from 0-1."},
-    #                 {"role": "user", "content": bio1},
-    #                 {"role": "user", "content": bio2}
-    #             ]
-    #         )
-    #         response_text = response.choices[0].message.content
-    #         # print(response_text)
+    def get_bio_similarity(bio1, bio2, model="gpt-4"):
+        """Get bio similarity using OpenAI's chat completion."""
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": "Calculate the similarity between two bios and respond only with a float from 0-1."},
+                    {"role": "user", "content": bio1},
+                    {"role": "user", "content": bio2}
+                ]
+            )
+            response_text = response.choices[0].message.content
 
-    #         match = re.search(r'\b\d+\.\d+\b', response_text) # Find float in the response
-    #         if match:
-    #             return float(match.group(0))
-    #         else:
-    #             print("No float found in response.")
-    #             return 0
-    #     except Exception as e:
-    #         print(f"Error in fetching similarity: {e}")
-    #         return 0
+            match = re.search(r'\b\d+\.\d+\b', response_text) # Find float in the response
+            if match:
+                return float(match.group(0))
+            else:
+                print("No float found in response.")
+                return 0
+        except Exception as e:
+            print(f"Error in fetching similarity: {e}")
+            return 0
         
-    # def calculate_bio_similarity(df):
-    #     """Calculate bio similarity matrix using OpenAI completions."""
-    #     n = len(df)
-    #     bio_similarity = np.zeros((n, n))
+    def calculate_bio_similarity(df):
+        """Calculate bio similarity matrix using OpenAI completions."""
+        n = len(df)
+        bio_similarity = np.zeros((n, n))
         
-    #     for i in range(n):
-    #         for j in range(i + 1, n):
-    #             sim = get_bio_similarity(df.iloc[i]['Bio'], df.iloc[j]['Bio'])
-    #             bio_similarity[i][j] = bio_similarity[j][i] = sim
+        for i in range(n):
+            for j in range(i + 1, n):
+                sim = get_bio_similarity(df.iloc[i]['Bio'], df.iloc[j]['Bio'])
+                bio_similarity[i][j] = bio_similarity[j][i] = sim
 
-    #     return pd.DataFrame(bio_similarity, index=df['FirstName'], columns=df['FirstName'])
+        return pd.DataFrame(bio_similarity, index=df.index, columns=df.index)
 
-    # bio_similarity_df = calculate_bio_similarity(df)
-    # print(bio_similarity_df)
+    user_bio_sim = calculate_bio_similarity(df)
 
     ### COMBINING MATRICES FOR END RESULT
 
-    weights = {'boolean'  : 2,    # smoking, pets, is working
-            'numerical': 1,    # age, faculty year
-            'faculty'  : 1,    # faculty group similarity
-            'language' : 0.5,  # language jaccard
-            'hobby'    : 2     # hobby jaccard
+    weights = { 'boolean'  : 2,     # smoking, pets, is working
+                'numerical': 1,     # age, faculty year
+                'faculty'  : 1,     # faculty group similarity
+                'language' : 0.5,   # language jaccard
+                'hobby'    : 2,     # hobby jaccard
+                'bio'      : 2      # OpenAI AI text comparison
             }
     total_weight = sum(weights.values())
     normalized_weights = {key: value / total_weight for key, value in weights.items()}
@@ -291,10 +285,10 @@ def process_user_data(users_data):
                             user_numerical_sim * normalized_weights['numerical'] +
                             user_faculty_sim * normalized_weights['faculty'] +
                             user_language_sim * normalized_weights['language'] +
-                            user_hobby_sim * normalized_weights['hobby'] 
+                            user_hobby_sim * normalized_weights['hobby'] +
+                            user_bio_sim * normalized_weights['bio']
                             )
 
-    # print(combined_similarity_df)
 
     def get_best_matches(user_id, combined_similarity_df):
         if user_id not in combined_similarity_df.index:
@@ -311,17 +305,7 @@ def process_user_data(users_data):
 
         return best_matches_list
 
-    def get_all_user_preferences(combined_similarity_df):
-        all_preferences = []
-        
-        for user_id in combined_similarity_df.index:
-            best_matches = get_best_matches(user_id, combined_similarity_df)
-            all_preferences.append(best_matches)
-        
-        return all_preferences
-
     output_data = get_best_matches(signed_user_id, combined_similarity_df)
-    print(output_data)    
 
     return {'status': 'success', 'data': output_data}
 
