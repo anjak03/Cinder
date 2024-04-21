@@ -1,3 +1,13 @@
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 section#msgIntro {
   text-align: center;
 }
@@ -23,6 +33,7 @@ section#msgIntro {
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.5s ease;
+  animation: slideFromTop 0.5s ease-out;
 }
 .contact-messages-container .contacts .user-info:hover {
   background-color: #045ac4;
