@@ -123,14 +123,21 @@ public class UserController : Controller
 
 
 
+string existingUserId = existingUser.Id;  // Ensure this is set to the ID of the user you're interested in
 
 var allUsers = await GetAllUserData();
+var userData = new
+{
+    ExistingUserId = existingUserId,
+    Users = allUsers
+};
+
 var settings = new JsonSerializerSettings
 {
     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
     ContractResolver = new CamelCasePropertyNamesContractResolver()
 };
-var allUsersJson = JsonConvert.SerializeObject(allUsers, settings);
+var allUsersJson = JsonConvert.SerializeObject(userData, settings);
 
 var apiUrl = "http://localhost:5000/recommend";
 var content = new StringContent(allUsersJson, Encoding.UTF8, "application/json");
@@ -157,6 +164,8 @@ else
     Console.WriteLine("Flask API call failed with status code {0}", response.StatusCode);
     return View("Error");
 }
+
+
 
 
                     /*var users = await _context.Users.Where(u => u.Id != existingUser.Id)
@@ -232,8 +241,8 @@ else
 
 private async Task<List<UserDto>> GetAllUserData()
 {
-    var users = await _context.Users
-        .Include(u => u.Faculty)  // Make sure to include Faculty if it's not included by default
+    return await _context.Users
+        .Include(u => u.Faculty)  // Eager load the faculty data
         .Select(u => new UserDto
         {
             Id = u.Id,
@@ -242,10 +251,10 @@ private async Task<List<UserDto>> GetAllUserData()
             MyBooleanProperty = u.MyBooleanProperty,
             Bio = u.Bio,
             Age = u.Age,
-            Faculty = new FacultyDto
+            Faculty = u.Faculty == null ? null : new FacultyDto
             {
-                Id_Faculty = u.Faculty.Id_Faculty, // Assuming Faculty has an Id_Faculty field
-                Name = u.Faculty.Name // Assuming Faculty has a Name field
+                Id_Faculty = u.Faculty.Id_Faculty,
+                Name = u.Faculty.Name
             },
             FacultyYear = u.FacultyYear,
             Rating = u.Rating,
@@ -256,8 +265,8 @@ private async Task<List<UserDto>> GetAllUserData()
             Pets = u.Pets,
             ImageURL = u.ImageURL,
             LeaseDuration = u.LeaseDuration,
-            Property = null, // Map this if needed
-            MatchedUsers = null, // Avoid recursive navigation properties
+            Property = null,  // Assuming no need to serialize complex properties
+            MatchedUsers = null,  // Avoid serializing potentially recursive relationships
             Languages = u.UserLanguages.Select(ul => new LanguageDto
             {
                 Id_Language = ul.Language.Id_Language,
@@ -268,10 +277,10 @@ private async Task<List<UserDto>> GetAllUserData()
                 Id_Hobby = uh.Hobby.Id_Hobby,
                 Name = uh.Hobby.Name
             }).ToList()
-        }).ToListAsync();
-
-    return users;
+        })
+        .ToListAsync();
 }
+
 
 
 
