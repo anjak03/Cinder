@@ -28,8 +28,8 @@ body {
   box-shadow: $button-box-shadow;
 
   &:hover {
-    background-color: lighten($secondary-color, 20%);
-    border-color: lighten($secondary-color, 20%);
+    background-color: lighten($secondary-color, 30%);
+    border-color: lighten($secondary-color, 30%);
     color: $primary-color;
   }
 }
