@@ -53,10 +53,9 @@ section#msgIntro {
 
     .messagesList {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      flex: 1;
+      flex-direction: column-reverse;
       overflow-y: auto;
+      padding-right: 10px;
       height: 400px;
       gap: 10px;
       box-sizing: border-box;
