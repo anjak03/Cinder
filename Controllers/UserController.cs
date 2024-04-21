@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-
+using Cinder.Dtos;
 
 namespace Cinder.Controllers;
 
@@ -124,21 +124,17 @@ public class UserController : Controller
 
 
 
-                    
 var allUsers = await GetAllUserData();
 var settings = new JsonSerializerSettings
 {
     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-    // Optionally, you can also set ContractResolver if you want to control which properties get serialized
     ContractResolver = new CamelCasePropertyNamesContractResolver()
 };
 var allUsersJson = JsonConvert.SerializeObject(allUsers, settings);
 
+var apiUrl = "http://localhost:5000/recommend";
+var content = new StringContent(allUsersJson, Encoding.UTF8, "application/json");
 
-                    var apiUrl = "http://localhost:5000/recommend";
-                    var content = new StringContent(allUsersJson, Encoding.UTF8, "application/json");
-
-                    
 HttpResponseMessage response = null;
 try
 {
@@ -147,25 +143,22 @@ try
 catch (HttpRequestException ex)
 {
     Console.WriteLine("Error sending data to the Flask API: {0}", ex.Message);
-    return View("Error"); // Make sure to pass an appropriate error message or model to the view
+    return View("Error");
 }
 
 if (response.IsSuccessStatusCode)
 {
     var responseJson = await response.Content.ReadAsStringAsync();
     var recommendations = JsonConvert.DeserializeObject<dynamic>(responseJson);
-    //Console.WriteLine("Recommendations received: {0}", recommendations);
-    
-    // Additional logic to handle the recommendations
-    // ...
-
     return RedirectToAction("Success");
 }
 else
 {
     Console.WriteLine("Flask API call failed with status code {0}", response.StatusCode);
-    return View("Error"); // Again, pass an appropriate error message or model
+    return View("Error");
 }
+
+
                     /*var users = await _context.Users.Where(u => u.Id != existingUser.Id)
                                                        .ToListAsync();
 
@@ -237,15 +230,53 @@ else
 
     }
 
-    private async Task<List<User>> GetAllUserData()
+private async Task<List<UserDto>> GetAllUserData()
 {
-    // Eager load related data to include in serialization if necessary
     var users = await _context.Users
-                              .Include(u => u.UserLanguages)
-                              // ... any other includes if necessary
-                              .ToListAsync();
+        .Include(u => u.Faculty)  // Make sure to include Faculty if it's not included by default
+        .Select(u => new UserDto
+        {
+            Id = u.Id,
+            FirstName = u.FirstName,
+            LastName = u.LastName,
+            MyBooleanProperty = u.MyBooleanProperty,
+            Bio = u.Bio,
+            Age = u.Age,
+            Faculty = new FacultyDto
+            {
+                Id_Faculty = u.Faculty.Id_Faculty, // Assuming Faculty has an Id_Faculty field
+                Name = u.Faculty.Name // Assuming Faculty has a Name field
+            },
+            FacultyYear = u.FacultyYear,
+            Rating = u.Rating,
+            Sex = u.Sex,
+            Employed = u.Employed,
+            Employment = u.Employment,
+            Smoker = u.Smoker,
+            Pets = u.Pets,
+            ImageURL = u.ImageURL,
+            LeaseDuration = u.LeaseDuration,
+            Property = null, // Map this if needed
+            MatchedUsers = null, // Avoid recursive navigation properties
+            Languages = u.UserLanguages.Select(ul => new LanguageDto
+            {
+                Id_Language = ul.Language.Id_Language,
+                Name = ul.Language.Name
+            }).ToList(),
+            Hobbies = u.UserHobbies.Select(uh => new HobbyDto
+            {
+                Id_Hobby = uh.Hobby.Id_Hobby,
+                Name = uh.Hobby.Name
+            }).ToList()
+        }).ToListAsync();
+
     return users;
 }
+
+
+
+
+
 
 
 [Authorize]
