@@ -1,0 +1,95 @@
+.cndr-main-login-register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cndr-main-login-register-container .login-container {
+  margin-top: 50px;
+}
+.cndr-main-login-register-container .form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  padding: 50px 0;
+  border: 1px solid rgb(177, 177, 177);
+  border-radius: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.cndr-main-login-register-container .form-container .form-header {
+  padding-bottom: 20px;
+}
+.cndr-main-login-register-container .form-container .cinder-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px 0;
+  max-width: 308.5px;
+}
+.cndr-main-login-register-container .form-container .cinder-form > * {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.cndr-main-login-register-container .form-container .cinder-form .form-floating {
+  position: relative;
+}
+.cndr-main-login-register-container .form-container .cinder-form .form-floating label.form-label {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  font-size: 0.85rem;
+}
+.cndr-main-login-register-container .form-container .cinder-form .form-floating input.form-control {
+  text-align: center;
+}
+.cndr-main-login-register-container .form-container .cinder-form .select-form-container {
+  display: flex;
+  flex-direction: column;
+}
+.cndr-main-login-register-container .form-container .cinder-form .select-form-container .select-form {
+  width: 100%;
+  border-radius: 5px;
+}
+.cndr-main-login-register-container .form-container .cinder-form .radio-form-floating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cndr-main-login-register-container .form-container .cinder-form .radio-form-floating .radio-option {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  line-height: 34px;
+}
+.cndr-main-login-register-container .form-container .cinder-form div #login-submit {
+  background-color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+}
+.cndr-main-login-register-container .form-container .cinder-form div .checkbox .form-label .form-check-input:checked {
+  background-color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+}
+.cndr-main-login-register-container .form-container .cinder-form div p a {
+  color: #0081f2;
+}
+.cndr-main-login-register-container .form-container .cinder-form div div .form-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0 10px;
+}
+.cndr-main-login-register-container .form-container .cinder-form div div .form-check:checked,
+.cndr-main-login-register-container .form-container .cinder-form div div .form-check-input:checked {
+  background-color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+}
+
+/*# sourceMappingURL=form.css.map */

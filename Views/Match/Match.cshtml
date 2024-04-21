@@ -1,119 +1,191 @@
 @model List<Cinder.Models.Match>
 
-@* @{
-// Retrieve the currentIndex from the query parameters
-int currentIndex = Context.Request.Query["currentIndex"].FirstOrDefault() != null
-? int.Parse(Context.Request.Query["currentIndex"].FirstOrDefault())
-: 0;
-
-} *@
-
-
-<section id="welcome" class="o_nama">
-    <h1>Let's match with other users!</h1>
-</section><!-- end welcome -->
-
-<section id="matchSection">
-
-    @if(Model.Any()){
-        <h3>Your best match:</h3>
-        <h3 class="golden">@Model[0].User2.FirstName @Model[0].User2.LastName</h3>
+<div id="best-match">
+    @if (Model.Any())
+    {
+        <h1>Your best match:</h1>
+        <h2>@Model[0].User2.FirstName @Model[0].User2.LastName</h2>
     }
+</div>
 
-    <div class="main-match-div">
-        <div class="all-potential-view-info-div">
-            @if (Model.Any())
+<div class="main-match-div">
+    <div class="all-potential-view-info-div">
+        @if (Model.Any())
+        {
+            <div class="potential-match-info-with-img">
+                <div class="potential-match-info-div left-aligned">
+                    <div class="pmi-visuals">
+                        <h3>Info about user</h3>
+                        <ion-icon class="pmi-icon" name="person"></ion-icon>
+                    </div>
+                    <div class="pmi-info">
+                        <div class="pmi-info-split">
+                            <p><span>User:</span> @Model[0].User2.UserName</p>
+                            <p><span>Bio:</span> @Model[0].User2.Bio</p>
+                            <p><span>Age:</span> @Model[0].User2.Age</p>
+                            <p><span>Faculty:</span> @Model[0].User2.Faculty?.Name</p>
+                            <p><span>Faculty Year:</span> @Model[0].User2.FacultyYear</p>
+                        </div>
+                        <div class="pmi-info-split">
+                            <p><span>Sex:</span> @Model[0].User2.Sex</p>
+                            <p><span>Employed:</span> @Model[0].User2.Employed</p>
+                            <p><span>Employment:</span> @Model[0].User2.Employment</p>
+                            <p><span>Smoker:</span> @Model[0].User2.Smoker</p>
+                            <p><span>Pets:</span> @Model[0].User2.Pets</p>
+                        </div>
+                    </div>
+                </div>
+                <img src="~/Assets/Match Image 1.png" width="35%" height="35%">
+            </div>
+
+            @if (User.IsInRole("Taker"))
             {
-                <div class="potential-match-info-div">
-                    <h3>Info about user</h3>
-                    <p><span>User:</span> @Model[0].User2.UserName</p>
-                    <p><span>Bio:</span> @Model[0].User2.Bio</p>
-                    <p><span>Age:</span> @Model[0].User2.Age</p>
-                    <p><span>Faculty:</span> @Model[0].User2.Faculty?.Name</p>
-                    <p><span>Faculty Year:</span> @Model[0].User2.FacultyYear</p>
-                    <p><span>Sex:</span> @Model[0].User2.Sex</p>
-                    <p><span>Employed:</span> @Model[0].User2.Employed</p>
-                    <p><span>Employment:</span> @Model[0].User2.Employment</p>
-                    <p><span>Smoker:</span> @Model[0].User2.Smoker</p>
-                    <p><span>Pets:</span> @Model[0].User2.Pets</p>
+                <div class="potential-match-info-with-img">
+                    <img src="~/Assets/Match Image 2.png" width="35%" height="35%">
+                    <div class="potential-match-info-div right-aligned">
+                        <div class="pmi-visuals">
+                            <h3>Info about property</h3>
+                            <ion-icon class="pmi-icon" name="home"></ion-icon>
+                        </div>
+                        <div class="pmi-info">
+                            <div class="pmi-info-split">
+                                <p><span>Type:</span> @Model[0].User2.Property.Type</p>
+                                <p><span>Address:</span> @Model[0].User2.Property.Address</p>
+                                <p><span>City:</span> @Model[0].User2.Property.City</p>
+                                <p><span>Neighborhood:</span> @Model[0].User2.Property.Neighborhood</p>
+                                <p><span>Square Meters:</span> @Model[0].User2.Property.SquareMeters</p>
+                                <p><span>Description:</span> @Model[0].User2.Property.Description</p>
+                                <p><span>Image:</span>
+
+                                    <img src="@Model[0].User2.Property.Image" alt="Property Image" />
+                                </p>
+                            </div>
+                            <div class="pmi-info-split">
+                                <p><span>Deposit:</span> @Model[0].User2.Property.Deposit</p>
+                                <p><span>Furnishings:</span> @Model[0].User2.Property.Furnishings</p>
+                                <p><span>Parking:</span> @Model[0].User2.Property.Parking</p>
+                                <p><span>Pets Allowed:</span> @Model[0].User2.Property.PetsAllowed</p>
+                                <p><span>Smoking Allowed:</span> @Model[0].User2.Property.SmokingAllowed</p>
+                                <p><span>Guests Allowed:</span> @Model[0].User2.Property.GuestsAllowed</p>
+                                <p><span>Wifi:</span> @Model[0].User2.Property.Wifi</p>
+                            </div>
+                            <div class="pmi-info-split">
+                                <p><span>Washing Machine:</span> @Model[0].User2.Property.WashingMachine</p>
+                                <p><span>Closest Public Transport:</span> @Model[0].User2.Property.ClosestPublicTransport</p>
+                                <p><span>Closest Grocery Store:</span> @Model[0].User2.Property.ClosestGorceryStore</p>
+                                <p><span>House Rules:</span> @Model[0].User2.Property.HouseRules</p>
+                                <p><span>Number of Bathrooms:</span> @Model[0].User2.Property.NumberOfBathrooms</p>
+                                <p><span>Number of Bedrooms:</span> @Model[0].User2.Property.NumberOfBedrooms</p>
+                                <p><span>Max Number of Tenants:</span> @Model[0].User2.Property.MaxNumberOfTenants</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                @if (User.IsInRole("Taker"))
+                @foreach (var room in Model[0].User2.Property.Rooms)
                 {
-                    <div class="potential-match-info-div">
-                        <h3>Info about property</h3>
-                        <p><span>Type:</span> @Model[0].User2.Property.Type</p>
-                        <p><span>Address:</span> @Model[0].User2.Property.Address</p>
-                        <p><span>City:</span> @Model[0].User2.Property.City</p>
-                        <p><span>Neighborhood:</span> @Model[0].User2.Property.Neighborhood</p>
-                        <p><span>Square Meters:</span> @Model[0].User2.Property.SquareMeters</p>
-                        <p><span>Description:</span> @Model[0].User2.Property.Description</p>
-                        <p><span>Image:</span>
-
-                        <img src="@Model[0].User2.Property.Image" alt="Property Image" />
-                        </p>
-                        <p><span>Deposit: @Model[0].User2.Property.Deposit</p>
-                        <p><span>Furnishings:</span> @Model[0].User2.Property.Furnishings</p>
-                        <p><span>Parking:</span> @Model[0].User2.Property.Parking</p>
-                        <p><span>Pets Allowed:</span> @Model[0].User2.Property.PetsAllowed</p>
-                        <p><span>Smoking Allowed:</span> @Model[0].User2.Property.SmokingAllowed</p>
-                        <p><span>Guests Allowed:</span> @Model[0].User2.Property.GuestsAllowed</p>
-                        <p><span>Wifi:</span> @Model[0].User2.Property.Wifi</p>
-                        <p><span>Washing Machine:</span> @Model[0].User2.Property.WashingMachine</p>
-                        <p><span>Closest Public Transport:</span> @Model[0].User2.Property.ClosestPublicTransport</p>
-                        <p><span>Closest Grocery Store:</span> @Model[0].User2.Property.ClosestGorceryStore</p>
-                        <p><span>House Rules:</span> @Model[0].User2.Property.HouseRules</p>
-                        <p><span>Number of Bathrooms:</span> @Model[0].User2.Property.NumberOfBathrooms</p>
-                        <p><span>Number of Bedrooms:</span> @Model[0].User2.Property.NumberOfBedrooms</p>
-                        <p><span>Max Number of Tenants:</span> @Model[0].User2.Property.MaxNumberOfTenants</p>
-                    </div>
-
-                    @foreach (var room in Model[0].User2.Property.Rooms)
-                    {
-                        <div class="potential-match-info-div">
-                            <h3>Info about the room</h3>
-                            <p><span>Room Type:</span> @room.Type</p>
-                            <p><span>Room Description:</span> @room.Description</p>
-                            <p><span>Room Image:</span> @room.Image</p>
-                            <p><span>Room Price:</span> @room.Price</p>
-                            <p><span>Utilities:</span> @room.Utilities</p>
-                            <p><span>Move-in Date:</span> @room.MoveInDate</p>
-                            <p><span>Move-out Date:</span> @room.MoveOutDate</p>
-                            <p><span>Furnishings:</span> @room.Furnishings</p>
-                            <p><span>Square Meters:</span> @room.SquareMeters</p>
-                            <p><span>Heating:</span> @room.Heating</p>
-                            <p><span>Cooling:</span> @room.Cooling</p>
-                            <p><span>Private Bathroom:</span> @room.PrivateBathroom</p>
-                            <p><span>Private Kitchen:</span> @room.PrivateKitchen</p>
-                            <p><span>Private Balcony:</span> @room.PrivateBalcony</p>
-                            <p><span>Private Terrace:</span> @room.PrivateTerrace</p>
+                    <div class="potential-match-info-with-img">
+                        <div class="potential-match-info-div not-aligned">
+                            <div class="pmi-visuals">
+                                <h3>Info about the room</h3>
+                                <ion-icon class="pmi-icon" name="bed"></ion-icon>
+                            </div>
+                            <div class="pmi-info">
+                                <div class="pmi-info-split">
+                                    <p><span>Room Type:</span> @room.Type</p>
+                                    <p><span>Room Description:</span> @room.Description</p>
+                                    <p><span>Room Image:</span> @room.Image</p>
+                                    <p><span>Room Price:</span> @room.Price</p>
+                                    <p><span>Utilities:</span> @room.Utilities</p>
+                                </div>
+                                <div class="pmi-info-split">
+                                    <p><span>Move-in Date:</span> @room.MoveInDate</p>
+                                    <p><span>Move-out Date:</span> @room.MoveOutDate</p>
+                                    <p><span>Furnishings:</span> @room.Furnishings</p>
+                                    <p><span>Square Meters:</span> @room.SquareMeters</p>
+                                    <p><span>Heating:</span> @room.Heating</p>
+                                </div>
+                                <div class="pmi-info-split">
+                                    <p><span>Cooling:</span> @room.Cooling</p>
+                                    <p><span>Private Bathroom:</span> @room.PrivateBathroom</p>
+                                    <p><span>Private Kitchen:</span> @room.PrivateKitchen</p>
+                                    <p><span>Private Balcony:</span> @room.PrivateBalcony</p>
+                                    <p><span>Private Terrace:</span> @room.PrivateTerrace</p>
+                                </div>
+                            </div>
                         </div>
-                    }
+                    </div>
                 }
             }
-            else
-            {
-                <div class="noMatch">
+        }
+        else
+        {
+            <div class="no-match">
                 <h3>Oops!</h3>
                 <p>Looks like there are no potential matches found currently...</p>
-                </div>
-            }
-        </div>
-        <div class="matchBtns">
-            @if (Model.Any())
-            {
-                <form asp-action="Match" asp-controller="Match" method="post">
-                    <input type="hidden" name="matchId" value="@Model[0].Id_Match" />
-                    <input type="hidden" name="userId2" value="@Model[0].User2.Id" />
-                    <input type="hidden" name="userId1" value="@Model[0].User1.Id" />
-                    <button class="btn btn-primary cinder-button btn_img gr" type="submit" name="decision" value=true>
-                        <img src="../../images/green_tick.png" alt="Yes" />
-                    </button>
-                    <button class="btn btn-primary cinder-button btn_img rd" type="submit" name="decision" value=false>
-                        <img src="../../images/red_X.png" alt="No" />
-                    </button>
-                </form>
-            }
-        </div>
-    </div><!-- end main-match-div -->
-</section>
+            </div>
+        }
+    </div>
+    <div class="match-btns">
+        @if (Model.Any())
+        {
+            <form asp-action="Match" asp-controller="Match" method="post">
+                <input type="hidden" name="matchId" value="@Model[0].Id_Match" />
+                <input type="hidden" name="userId2" value="@Model[0].User2.Id" />
+                <input type="hidden" name="userId1" value="@Model[0].User1.Id" />
+                <button class="match-btn right-aligned" type="submit" name="decision" value=false>
+                    <img src="~/Assets/red_X.png" alt="No" />
+                </button>
+                <button class="match-btn" type="submit" name="decision" value=true>
+                    <img src="~/Assets/green_tick.png" alt="Yes" />
+                </button>
+            </form>
+        }
+    </div>
+</div>
+
+<!-- For sliding into the screen -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const elementsLeft = document.querySelectorAll('.potential-match-info-div.left-aligned, .potential-match-info-with-img img');
+        const elementsRight = document.querySelectorAll('.potential-match-info-div.right-aligned, .potential-match-info-with-img img');
+        const elementsNotAligned = document.querySelectorAll('.potential-match-info-div.not-aligned, .potential-match-info-with-img img');
+
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observerLeft = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated', 'left-aligned');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        const observerRight = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated', 'right-aligned');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        const observerNotAligned = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated', 'not-aligned');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        elementsLeft.forEach(el => observerLeft.observe(el));
+        elementsRight.forEach(el => observerRight.observe(el));
+        elementsNotAligned.forEach(el => observerNotAligned.observe(el))
+    });
+</script>

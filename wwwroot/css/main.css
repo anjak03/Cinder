@@ -13,6 +13,24 @@ body {
   min-height: 100vh;
 }
 
+.cndr-secondary-button {
+  background-color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+  border-radius: 5px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  padding: 4px 10px;
+  transition: background-color 0.1s;
+  font-size: 18px;
+  text-decoration: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.cndr-secondary-button:hover {
+  background-color: #333333;
+  border-color: #333333;
+  color: rgb(255, 255, 255);
+}
+
 .cndr-tertiary-button {
   background-color: #0081f2;
   border-color: #0081f2;
