@@ -1,10 +1,12 @@
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace Cinder.Models 
 {
+    /// <summary>
+    /// Represents a message between two users.
+    /// </summary>
     public class Message
     {
         [Key]

@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cinder.Models
 {
+    /// <summary>
+    /// Represents an association between a User and a Language, supporting a many-to-many relationship.
+    /// </summary>
     public class UserLanguage
     {
         [Key]

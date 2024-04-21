@@ -1,9 +1,11 @@
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Cinder.Models;
 
 namespace Cinder.Models {
+    /// <summary>
+    /// Represents a property available for rent or sale.
+    /// </summary>
     public class Property {
         [Key]
         public int Id_Property { get; set; }

@@ -39,8 +39,6 @@ public class ChatHub : Hub
         }
     }
 
-
-
     public override async Task OnConnectedAsync()
     {
         Console.WriteLine($"User connected: {Context.ConnectionId}");
@@ -52,7 +50,4 @@ public class ChatHub : Hub
         Console.WriteLine($"User disconnected: {Context.ConnectionId}");
         await base.OnDisconnectedAsync(exception);
     }
-
-
 }
-
