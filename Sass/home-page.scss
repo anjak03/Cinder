@@ -70,6 +70,7 @@
     box-shadow: $primary-box-shadow;
     border-radius: 15px;
     border: 1px solid $weakest-gray;
+    transition: box-shadow 0.3s ease;
 
     .text-container {
       display: flex;
@@ -79,6 +80,10 @@
     #register-now-container {
       display: flex;
       justify-content: center;
+    }
+
+    &:hover {
+      box-shadow: $primary-box-shadow-stronger;
     }
   }
 
