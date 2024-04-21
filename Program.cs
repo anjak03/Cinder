@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationContext") ?? throw new InvalidOperationException("Connection string 'ApplicationContext' not found.")));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationContext>();
 
@@ -29,6 +29,7 @@ builder.Services.AddCors(options =>
                .AllowCredentials());
 });
 
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<MessageService>(); 
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 

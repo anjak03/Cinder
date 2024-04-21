@@ -1,144 +1,179 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Cinder.Models;
 using Cinder.Data;
-using Cinder.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace Cinder.Controllers {
+namespace Cinder.Controllers;
 
-    /// <summary>
-    /// Controller responsible for handling property-related actions.
-    /// </summary>
-    public class PropertyController : Controller {
-        private readonly UserManager<User> _userManager;
-        private readonly ApplicationContext _context;
+[Authorize]
+public class PropertyController : Controller
+{
+    private readonly UserManager<User> _userManager;
+    private readonly ApplicationContext _context;
+    private readonly UserService _userService;
 
-        public PropertyController(UserManager<User> userManager, ApplicationContext context) {
-            _userManager = userManager;
-            _context = context;
-        }
-        
-        /// <summary>
-        /// Displays the form to create a new property.
-        /// </summary>
-        /// <param name="userId">The user ID for which the property is to be created.</param>
-        /// <returns>A view to create a new property.</returns>
-        public IActionResult MakeProperty(string userId)
+    private readonly HttpClient _httpClient = new HttpClient();
+
+    public PropertyController(UserManager<User> userManager, ApplicationContext context, UserService userService)
+{
+    _userManager = userManager;
+    _context = context;
+    _userService = userService;
+}
+
+    // GET: Property/MakeProperty
+    public IActionResult MakeProperty(string userId)
+    {
+        ViewBag.UserId = userId;
+        return View();
+    }
+
+    // POST: Property/MakeProperty
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> MakeProperty(string UserId, [Bind("Type, Address, City, Neighborhood, SquareMeters, Description, Image, Deposit, Furnishings, Parking, PetsAllowed, SmokingAllowed, GuestsAllowed, Wifi, WashingMachine, ClosestPublicTransport, ClosestGorceryStore, HouseRules, NumberOfBathrooms, NumberOfBedrooms, MaxNumberOfTenants")] Property property)
+    {
+        if (ModelState.IsValid)
         {
-            ViewBag.UserId = userId;
-            return View();
-        }
-
-        /// <summary>
-        /// Posts the property creation form data to the server.
-        /// </summary>
-        /// <param name="UserId">The user ID for which the property is to be created.</param>
-        /// <param name="property">The property data bound from the form.</param>
-        /// <returns>A redirect to the add room view or re-displays the form if errors exist.</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> MakeProperty(string UserId, [Bind("Type, Address, City, Neighborhood, SquareMeters, Description, Image, Deposit, Furnishings, Parking, PetsAllowed, SmokingAllowed, GuestsAllowed, Wifi, WashingMachine, ClosestPublicTransport, ClosestGorceryStore, HouseRules, NumberOfBathrooms, NumberOfBedrooms, MaxNumberOfTenants")] Property property)
-        {
-            if (ModelState.IsValid)
+            var user = await _userManager.FindByIdAsync(UserId);
+            if (user != null)
             {
-                var user = await _userManager.FindByIdAsync(UserId);
-                if (user != null)
-                {
-                    user.Property = property;
-                    property.UserId= UserId;
-                    _context.Add(property);
-                    await _context.SaveChangesAsync();
+                user.Property = property;
+                property.UserId = UserId;
+                _context.Add(property);
+                await _context.SaveChangesAsync();
 
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AddRoom", "Property", new { propertyId = property.Id_Property });
+            }
+            else
+            {
+                return NotFound("User not found");
+            }
+        }
+        ViewBag.UserId = UserId;
+        return View(property);
+    }
+
+    // GET: Property/AddRoom/5
+    public IActionResult AddRoom(int? propertyId)
+    {
+        if (propertyId == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.PropertyId = propertyId;
+        return View();
+    }
+
+    // POST: Property/AddRoom/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddRoom(int propertyId, string addAnother, [Bind("Type, Description, Image, Price, Utilities, MoveInDate, MoveOutDate, Furnishings, SquareMeters, Heating, Cooling, PrivateBathroom, PrivateKitchen, PrivateBalcony, PrivateTerrace")] Room room)
+    {
+        if (ModelState.IsValid)
+        {
+            var property = await _context.Properties.FindAsync(propertyId);
+            if (property != null)
+            {
+                room.Property = property;
+                property.Rooms.Add(room);
+                room.Id_Property = propertyId;
+                _context.Add(room);
+                await _context.SaveChangesAsync();
+
+                if (addAnother == "true")
+                {
                     return RedirectToAction("AddRoom", "Property", new { propertyId = property.Id_Property });
                 }
                 else
                 {
-                    // Handle the case where the user is not found
-                    return NotFound("User not found");
+                    return RedirectToAction("Index", "Home");
                 }
             }
-
-            ViewBag.UserId = UserId;
-
-            return View(property);
+            else
+            {
+                return NotFound("Property not found");
+            }
         }
+        ViewBag.PropertyId = propertyId;
+        return View(room);
+    }
 
-        /// <summary>
-        /// Displays the form to add a room to a property.
-        /// </summary>
-        /// <param name="propertyId">The property ID to which the room will be added.</param>
-        /// <returns>A view to add a room.</returns>
-        public async Task<IActionResult> AddRoom(int? propertyId)
+    private async Task GenerateMatchesForUser(User user)
+    {
+        string existingUserId = user.Id;
+
+        var allUsers = await _userService.GetAllUserData();
+        var userData = new
         {
-            if (propertyId == null)
-            {
-                return NotFound();
-            }
+            ExistingUserId = existingUserId,
+            Users = allUsers
+        };
 
-            ViewBag.PropertyId = propertyId;
-            return View();
+        var settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+        var allUsersJson = JsonConvert.SerializeObject(userData, settings);
+
+        var apiUrl = "http://localhost:5000/recommend";
+        var content = new StringContent(allUsersJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = null;
+        try
+        {
+            response = await _httpClient.PostAsync(apiUrl, content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseJson = await response.Content.ReadAsStringAsync();
+                var recommendations = JsonConvert.DeserializeObject<dynamic>(responseJson);
+
+                foreach (var recommendation in recommendations.data)
+                {
+                    string recommendedUserId = recommendation[0];
+                    double similarityScore = recommendation[1];
+
+                    var match1 = new Match
+                    {
+                        Id_User1 = user.Id,
+                        Id_User2 = recommendedUserId,
+                        points = similarityScore,
+                        User1 = user,
+                        User2 = await _context.Users.FindAsync(recommendedUserId)
+                    };
+                    _context.Matches.Add(match1);
+
+                    var match2 = new Match
+                    {
+                        Id_User2 = user.Id,
+                        Id_User1 = recommendedUserId,
+                        points = similarityScore,
+                        User1 = await _context.Users.FindAsync(recommendedUserId),
+                        User2 = user
+                    };
+                    _context.Matches.Add(match2);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                Console.WriteLine("Flask API call failed with status code {0}", response.StatusCode);
+            }
         }
-
-        /// <summary>
-        /// Posts the room addition form data to the server.
-        /// </summary>
-        /// <param name="Id_Property">The property ID to which the room will be added.</param>
-        /// <param name="addAnother">Indicator whether to return to add another room or complete.</param>
-        /// <param name="room">The room data bound from the form.</param>
-        /// <returns>Redirects based on user choice to add another room or completes the process.</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRoom(int Id_Property, string addAnother, [Bind("Type, Description, Image, Price, Utilities, MoveInDate, MoveOutDate, Furnishings, SquareMeters, Heating, Cooling, PrivateBathroom, PrivateKitchen, PrivateBalcony, PrivateTerrace")] Room room)
+        catch (HttpRequestException ex)
         {
-            if (ModelState.IsValid)
-            {
-                var property = await _context.Properties.FindAsync(Id_Property);
-                if (property != null)
-                {
-                    room.Property = property;
-                    property.Rooms.Add(room);
-                    room.Id_Property = Id_Property;
-                    _context.Add(room);
-                    await _context.SaveChangesAsync();
-
-                    _context.Update(property);
-                    await _context.SaveChangesAsync();
-                    if (addAnother == "true")
-                    {
-                        return RedirectToAction("AddRoom", "Property", new { propertyId = property.Id_Property });
-                    }
-                    else
-                    {
-                        var user = await _userManager.FindByIdAsync(property.UserId);
-                        user.MyBooleanProperty = true;
-                        _context.Update(user);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    // Handle the case where the user is not found
-                    return NotFound("Property not found");
-                }
-            }
-            // If ModelState is not valid, print validation errors
-            foreach (var modelState in ModelState.Values)
-            {
-                foreach (var error in modelState.Errors)
-                {
-                    // Print or log the validation error
-                    Console.WriteLine($"Validation Error: {error.ErrorMessage}");
-                }
-            }
-            ViewBag.PropertyId = Id_Property;
-
-            return View(room);
+            Console.WriteLine("Error sending data to the Flask API: {0}", ex.Message);
         }
     }
+
+    // Implement additional methods as needed
 }
