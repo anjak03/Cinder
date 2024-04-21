@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Contact your matches!";
+    var hasMatches = Model.Count > 0; 
 }
 
 @if (@Model.Count != 0)
@@ -106,34 +107,38 @@
             }
         });
 
-        const currentUserID = '@Model[0].User1.Id';  
+         @if (hasMatches) {
+            <text>
+            const currentUserID = '@Model[0].User1.Id';  
 
-        function openChat(userId) {
-            // Deselect any previously selected chat
-            document.querySelectorAll('.user-info.active-chat').forEach(user => {
-                user.classList.remove('active-chat');
-            });
-
-            document.querySelector(`li[user-id='${userId}']`).classList.add('active-chat');
-            
-            fetch(`/api/messages/history/${userId}`)
-                .then(response => response.json())
-                .then(messages => {
-                    const messagesList = document.getElementById("messagesList");
-                    messagesList.innerHTML = ''; 
-
-                    messages.forEach(message => {
-                        var msg = document.createElement("div");
-                        msg.textContent = message.content;
-
-                        msg.className = message.senderId === currentUserID ? 'sent-message' : 'received-message';
-
-                        messagesList.appendChild(msg);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error fetching chat history:", error);
+            function openChat(userId) {
+                // Deselect any previously selected chat
+                document.querySelectorAll('.user-info.active-chat').forEach(user => {
+                    user.classList.remove('active-chat');
                 });
+
+                document.querySelector(`li[user-id='${userId}']`).classList.add('active-chat');
+
+                fetch(`/api/messages/history/${userId}`)
+                    .then(response => response.json())
+                    .then(messages => {
+                        const messagesList = document.getElementById("messagesList");
+                        messagesList.innerHTML = '';
+
+                        messages.forEach(message => {
+                            var msg = document.createElement("div");
+                            msg.textContent = message.content;
+
+                            msg.className = message.senderId === currentUserID ? 'sent-message' : 'received-message';
+
+                            messagesList.appendChild(msg);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching chat history:", error);
+                    });
+            }
+            </text>
         }
     </script>
 }
