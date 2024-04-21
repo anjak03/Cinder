@@ -24,17 +24,31 @@ This recommendation system is designed to provide personalized suggestions based
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+In order for the applicaton to work, first you need to run the Docker container.
 ```bash
-dotnet new mvc
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Cinder123*" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-CU8-ubuntu-20.04
+```
+
+After that, you need to create the Migrations folder and update the database:
+```bash
+dotnet ef migrations add INSERT_IME
+dotnet ef database update
+```
+
+First python must run in the background. After that run the project using the dotnet run command.
+```bash
+python \RecommendationSystem\app.py
+dotnet run
 ```
 
 ### Prerequisites
 
-What things you need to install the software and how to install them:
+What things you need to install to run the software:
 
 ```bash
+.NET 6.0 
+Docker 
 python>=3.8
 Flask
 numpy
@@ -43,11 +57,21 @@ scipy
 openai
 ```
 
-
-### Run the application
-
-python app.py
-dotnet run
+### Techonologies
+Recommendation System:
+- Python
+    - numpy
+    - scipy
+    - pandas
+    - Flask
+    - openai
+Backend:
+- C#
+- MySQL
+- Docker
+Frontend:
+- Sass, automatically compiles to regular CSS.
+- Razor pages, basic `.cshtml`, pages with scripts and included CSS stylesheet which were compiled from SCSS.
 
 
 ## Built With
@@ -57,6 +81,11 @@ dotnet run
 - [NumPy](https://numpy.org/) - Fundamental package for scientific computing with Python.
 - [Pandas](https://pandas.pydata.org/) - Library providing high-performance, easy-to-use data structures and data analysis tools.
 - [SciPy](https://www.scipy.org/) - Library used for scientific and technical computing.
+- [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr) - Used for real time messaging between matched users.
+- [Docker](https://hub.docker.com/) - Container for the database.
+- [.NetEf](https://learn.microsoft.com/en-us/ef/core/cli/dotnet) - Database creation based on given models.
+- [.NetIf](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-8.0&tabs=visual-studio) - Login functionality for the users.
+- [SendGrid](https://sendgrid.com/en-us) - Mail authentification and verification for users.
 
 ## Authors
 
