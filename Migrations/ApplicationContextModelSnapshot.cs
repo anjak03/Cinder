@@ -31,7 +31,8 @@ namespace Cinder.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Faculty"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id_Faculty");
 
@@ -47,7 +48,8 @@ namespace Cinder.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Hobby"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id_Hobby");
 
@@ -63,7 +65,8 @@ namespace Cinder.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Language"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id_Language");
 
@@ -104,8 +107,8 @@ namespace Cinder.Migrations
                     b.Property<int>("User2_Swipe")
                         .HasColumnType("int");
 
-                    b.Property<int>("points")
-                        .HasColumnType("int");
+                    b.Property<double>("points")
+                        .HasColumnType("float");
 
                     b.HasKey("Id_Match");
 
