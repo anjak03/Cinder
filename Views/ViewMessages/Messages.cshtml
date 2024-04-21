@@ -76,7 +76,7 @@
         }
 
         connection.on("ReceiveMessage", function (user, message) {
-            addMessageToDOM(message, false);
+            addMessageToDOM(user.content, false);
         });
 
         connection.start().then(function () {
@@ -115,10 +115,10 @@
                 const currentUserID = '@Model[0].User1.Id';
 
                 function openChat(userId) {
-                    // Deselect any previously selected chat
-                    document.querySelectorAll('.user-info.active-chat').forEach(user => {
-                        user.classList.remove('active-chat');
-                    });
+                // Deselect any previously selected chat
+                document.querySelectorAll('.user-info.active-chat').forEach(user => {
+                    user.classList.remove('active-chat');
+                });
 
                 document.querySelector(`div[user-id='${userId}']`).classList.add('active-chat');
 
