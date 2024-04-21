@@ -59,6 +59,7 @@ section#msgIntro {
   max-width: 60%;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  word-break: break-all;
   white-space: normal;
   margin-bottom: 10px;
 }
