@@ -25,7 +25,8 @@
                         var matchedUser = user.User2;
 
                         <div class="user-info" user-id="@matchedUser.Id" onclick="openChat('@matchedUser.Id')">
-                            <div class="user-name">@matchedUser.FirstName @matchedUser.LastName</div>
+                            <div class="user-name"><ion-icon name="chatbubble-ellipses" style="margin-right: 5px;"></ion-icon>@matchedUser.FirstName
+                                @matchedUser.LastName</div>
                             <p class="user-top-message">@matchedUser.Faculty</p>
                         </div>
                     }
@@ -115,24 +116,24 @@
                     document.querySelector(`div[user-id='${userId}']`).classList.add('active-chat');
 
                     fetch(`/api/messages/history/${userId}`)
-                                                    .then(response => response.json())
-                                                    .then(messages => {
-                                                        const messagesList = document.getElementById("messagesList");
-                                                        messagesList.innerHTML = '';
+                                                            .then(response => response.json())
+                                                            .then(messages => {
+                                                                const messagesList = document.getElementById("messagesList");
+                                                                messagesList.innerHTML = '';
 
-                                                        messages.forEach(message => {
-                                                            var msg = document.createElement("div");
-                                                            msg.textContent = message.content;
+                                                                messages.forEach(message => {
+                                                                    var msg = document.createElement("div");
+                                                                    msg.textContent = message.content;
 
-                                                            msg.className = message.senderId === currentUserID ? 'sent-message' : 'received-message';
+                                                                    msg.className = message.senderId === currentUserID ? 'sent-message' : 'received-message';
 
-                                                            messagesList.appendChild(msg);
-                                                        });
-                                                    })
-                                                    .catch(error => {
-                                                        console.error("Error fetching chat history:", error);
-                                                    });
-                                            }
+                                                                    messagesList.appendChild(msg);
+                                                                });
+                                                            })
+                                                            .catch(error => {
+                                                                console.error("Error fetching chat history:", error);
+                                                            });
+                                                    }
             </text>
         }
     </script>
