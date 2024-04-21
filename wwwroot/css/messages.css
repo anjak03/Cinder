@@ -1,0 +1,112 @@
+section#msgIntro {
+  text-align: center;
+}
+
+.contact-messages-container {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  height: 60vh;
+}
+.contact-messages-container .contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contact-messages-container .contacts .user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #0081f2;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+  animation: slideFromTop 0.5s ease-out;
+}
+.contact-messages-container .contacts .user-info:hover {
+  background-color: #045ac4;
+  cursor: pointer;
+}
+.contact-messages-container .contacts .user-info.clicked {
+  background-color: #045ac4;
+}
+.contact-messages-container .contacts .user-info .user-name {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 20px;
+}
+.contact-messages-container .messaging-space {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  width: 100%;
+  gap: 30px;
+}
+.contact-messages-container .messaging-space .messagesList {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-right: 10px;
+  height: 400px;
+  gap: 10px;
+  box-sizing: border-box;
+}
+.contact-messages-container .messaging-space .messagesList .sent-message,
+.contact-messages-container .messaging-space .messagesList .received-message {
+  max-width: 60%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  margin-bottom: 10px;
+}
+.contact-messages-container .messaging-space .messagesList .sent-message {
+  display: inline-block;
+  text-align: right;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(177, 177, 177);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 20px;
+  color: rgb(0, 0, 0);
+  margin-right: 0;
+  margin-left: auto;
+}
+.contact-messages-container .messaging-space .messagesList .received-message {
+  display: inline-block;
+  text-align: left;
+  padding: 10px;
+  margin-left: 0;
+  margin-right: auto;
+}
+.contact-messages-container .messaging-space .newMessageArea {
+  display: flex;
+  width: 100%;
+}
+.contact-messages-container .messaging-space .newMessageArea input[type=text] {
+  flex: 1;
+  margin-right: 8px;
+  border-radius: 8px;
+  border: 1px solid rgb(177, 177, 177);
+  padding: 5px;
+}
+.contact-messages-container .messaging-space .newMessageArea input[type=text]:active, .contact-messages-container .messaging-space .newMessageArea input[type=text]:focus {
+  border: 1px solid rgb(177, 177, 177);
+}
+.contact-messages-container .messaging-space .newMessageArea button {
+  flex-shrink: 0;
+  background-color: #0081f2;
+  border-color: #0081f2;
+  color: rgb(255, 255, 255);
+  transition: background-color 0.3s ease;
+  border-radius: 7px;
+}
+.contact-messages-container .messaging-space .newMessageArea button:hover {
+  background-color: #045ac4;
+  border-color: #045ac4;
+}
+
+/*# sourceMappingURL=messages.css.map */
