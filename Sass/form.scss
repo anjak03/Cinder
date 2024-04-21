@@ -1,0 +1,122 @@
+@import "./variables.scss";
+
+.cndr-main-login-register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .login-container {
+    margin-top: 50px;
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    padding: 50px 0;
+    border: 1px solid $weaker-gray;
+    border-radius: 40px;
+    box-shadow: $primary-box-shadow;
+
+    .form-header {
+      padding-bottom: 20px;
+    }
+
+    .cinder-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px 0;
+      max-width: 308.5px;
+
+      > * {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .form-floating {
+        position: relative;
+
+        label.form-label {
+          position: absolute;
+          top: 25%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          text-align: center;
+          font-size: 0.85rem;
+        }
+
+        input.form-control {
+          text-align: center;
+        }
+      }
+
+      .select-form-container {
+        display: flex;
+        flex-direction: column;
+
+        .select-form {
+          width: 100%;
+          border-radius: 5px;
+        }
+      }
+
+      .radio-form-floating {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .radio-option {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            line-height: 34px;
+        }
+      }
+
+      div {
+        #login-submit {
+          background-color: $secondary-color;
+          border-color: $secondary-color;
+        }
+
+        .checkbox {
+          .form-label {
+            .form-check-input:checked {
+              background-color: $secondary-color;
+              border-color: $secondary-color;
+            }
+          }
+        }
+
+        p {
+          a {
+            color: $tertiary-color;
+          }
+        }
+
+        div {
+          .form-check {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0 10px;
+          }
+
+          .form-check:checked,
+          .form-check-input:checked {
+            background-color: $secondary-color;
+            border-color: $secondary-color;
+          }
+        }
+      }
+    }
+  }
+}

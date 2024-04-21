@@ -1,0 +1,137 @@
+@model Cinder.Models.Room
+
+<div class="cndr-main-login-register-container">
+    <div class="register-container form-container">
+        <h1 class="form-header">Create/Edit Room</h1>
+        <form class="cinder-form" asp-action="AddRoom" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id_Property" value="@ViewBag.PropertyId" />
+
+            <div class="form-floating">
+                <label asp-for="Type" class="form-label">Room Type</label>
+                <select asp-for="Type" class="form-control">
+                    <option value="single">Single</option>
+                    <option value="double">Double</option>
+                    <option value="triple">Triple</option>
+                    <option value="quad">Quad</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Image" class="form-label">Image</label>
+                <input type="file" asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Price" class="form-label">Price</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Utilities" class="form-label">Utilities</label>
+                <input asp-for="Utilities" class="form-control" />
+                <span asp-validation-for="Utilities" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="MoveInDate" class="form-label">Move In Date</label>
+                <input asp-for="MoveInDate" type="date" class="form-control" />
+                <span asp-validation-for="MoveInDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="MoveOutDate" class="form-label">Move Out Date</label>
+                <input asp-for="MoveOutDate" type="date" class="form-control" />
+                <span asp-validation-for="MoveOutDate" class="text-danger"></span>
+            </div>
+
+            @* <div class="form-floating">
+            <label asp-for="Furnishings" class="form-label">Furnishings</label>
+            <input asp-for="Furnishings" class="form-control" />
+            <span asp-validation-for="Furnishings" class="text-danger"></span>
+            </div> *@
+
+            <div class="form-floating">
+                <label asp-for="SquareMeters" class="form-label">Square Meters</label>
+                <input asp-for="SquareMeters" class="form-control" />
+                <span asp-validation-for="SquareMeters" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Heating" class="form-label">Heating</label>
+                <select asp-for="Heating" type="checkbox" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Heating" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Cooling" class="form-label">Cooling</label>
+                <select asp-for="Cooling" type="checkbox" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Cooling" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="PrivateBathroom" class="form-label">Private Bathroom</label>
+                <select asp-for="PrivateBathroom" type="checkbox" class="form-control">\
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="PrivateBathroom" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="PrivateKitchen" class="form-label">Private Kitchen</label>
+                <select asp-for="PrivateKitchen" type="checkbox" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="PrivateKitchen" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="PrivateBalcony" class="form-label">Private Balcony</label>
+                <select asp-for="PrivateBalcony" type="checkbox" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="PrivateBalcony" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="PrivateTerrace" class="form-label">Private Terrace</label>
+                <select asp-for="PrivateTerrace" type="checkbox" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="PrivateTerrace" class="text-danger"></span>
+            </div>
+            <div class="form-floating radio-form-floating">
+                <div>
+                    <label>Do you want to add another room?</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="addAnother" value="true" required />Yes
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="addAnother" value="false" required />No
+                </div>
+            </div>
+            <button type="submit" class="cndr-secondary-button">Save</button>
+        </form>
+    </div>
+</div>
