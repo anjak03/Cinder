@@ -78,7 +78,7 @@ namespace Cinder.Areas.Identity.Pages.Account
                     // Send confirmation email
                 var apiKey = Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
                 var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("cinderapp.office@gmail.com", "Cinder App");
+                var from = new EmailAddress("cinderapplication@gmail.com", "Cinder App");
                 var subject = "Validate your account";
                 var to = new EmailAddress(email, "User");
                 var plainTextContent = "Please click the link to validate account";
