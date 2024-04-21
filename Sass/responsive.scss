@@ -1,0 +1,28 @@
+@import "./variables.scss";
+
+// These will be the styles/behaviour for smaller/phone viewports
+@media screen and (max-width: 768px) {
+  // Home page
+  .cndr-main-home-page-container {
+    .cndr-home-page-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .left-aligned,
+    .right-aligned {
+      width: 100%;
+    }
+  }
+
+  // Header
+  .cndr-header {
+    .cndr-header-container {
+        width: 50vw;
+    }
+
+    .wide-cndr-header-container {
+        width: 100vw;
+      }
+  }
+}

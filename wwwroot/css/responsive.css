@@ -1,0 +1,18 @@
+@media screen and (max-width: 768px) {
+  .cndr-main-home-page-container .cndr-home-page-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .cndr-main-home-page-container .left-aligned,
+  .cndr-main-home-page-container .right-aligned {
+    width: 100%;
+  }
+  .cndr-header .cndr-header-container {
+    width: 50vw;
+  }
+  .cndr-header .wide-cndr-header-container {
+    width: 100vw;
+  }
+}
+
+/*# sourceMappingURL=responsive.css.map */
