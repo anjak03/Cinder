@@ -46,7 +46,7 @@ section#msgIntro {
 }
 .contact-messages-container .messaging-space .messagesList {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   overflow-y: auto;
   padding-right: 10px;
   height: 400px;
