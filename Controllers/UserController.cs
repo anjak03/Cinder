@@ -2,18 +2,23 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Cinder.Models;
 using Cinder.Data;
-using Cinder.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Cinder.Dtos;
 
-namespace Cinder.Controllers {
-    public class UserController : Controller
-    {
-        private readonly UserManager<User> _userManager;
-        private readonly ApplicationContext _context;
+namespace Cinder.Controllers;
+
+public class UserController : Controller
+{
+    private readonly HttpClient _httpClient = new HttpClient();
+
+    private readonly UserManager<User> _userManager;
+    private readonly ApplicationContext _context;
 
             public UserController(UserManager<User> userManager, ApplicationContext context)
             {
@@ -49,22 +54,16 @@ namespace Cinder.Controllers {
             ViewBag.Faculties = new SelectList(_context.Faculties, "Id_Faculty", "Name");
             ViewBag.Hobbies = new SelectList(_context.Hobbies, "Id_Hobby", "Name");
 
-            return View(user);
+        return View(user);
+    }
+    //POST: User/CompleteProfile
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CompleteProfile (string id, [Bind("Id,Bio,Age,Id_Faculty,FacultyYear,Sex,Employed,Employment,Smoker,Pets,Id_Language,LeaseDuration,Id_Hobby")] User user){        
+        if (id != user.Id)
+        {
+            return NotFound();
         }
-        
-        /// <summary>
-        /// Handles the submission of the profile completion form.
-        /// </summary>
-        /// <param name="id">The user ID.</param>
-        /// <param name="user">The user details to update.</param>
-        /// <returns>Redirects to the appropriate next step based on user role and form completion.</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CompleteProfile (string id, [Bind("Id,Bio,Age,Id_Faculty,FacultyYear,Sex,Employed,Employment,Smoker,Pets,Id_Language,LeaseDuration,Id_Hobby")] User user){
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
 
             if (!ModelState.IsValid)
             {
@@ -123,8 +122,58 @@ namespace Cinder.Controllers {
                         }
                         await _context.SaveChangesAsync();
 
-                        var users = await _context.Users.Where(u => u.Id != existingUser.Id)
-                                                        .ToListAsync();
+                    //////////////////////////////////////////////////////
+                    //adding users to the Matches table
+
+
+
+string existingUserId = existingUser.Id;  // Ensure this is set to the ID of the user you're interested in
+
+var allUsers = await GetAllUserData();
+var userData = new
+{
+    ExistingUserId = existingUserId,
+    Users = allUsers
+};
+
+var settings = new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+    ContractResolver = new CamelCasePropertyNamesContractResolver()
+};
+var allUsersJson = JsonConvert.SerializeObject(userData, settings);
+
+var apiUrl = "http://localhost:5000/recommend";
+var content = new StringContent(allUsersJson, Encoding.UTF8, "application/json");
+
+HttpResponseMessage response = null;
+try
+{
+    response = await _httpClient.PostAsync(apiUrl, content);
+}
+catch (HttpRequestException ex)
+{
+    Console.WriteLine("Error sending data to the Flask API: {0}", ex.Message);
+    return View("Error");
+}
+
+if (response.IsSuccessStatusCode)
+{
+    var responseJson = await response.Content.ReadAsStringAsync();
+    var recommendations = JsonConvert.DeserializeObject<dynamic>(responseJson);
+    return RedirectToAction("Success");
+}
+else
+{
+    Console.WriteLine("Flask API call failed with status code {0}", response.StatusCode);
+    return View("Error");
+}
+
+
+
+
+                    /*var users = await _context.Users.Where(u => u.Id != existingUser.Id)
+                                                       .ToListAsync();
 
                         var currentUserRole = (await _userManager.GetRolesAsync(existingUser)).FirstOrDefault();
 
@@ -170,11 +219,11 @@ namespace Cinder.Controllers {
                                     var match1 = new Match { Id_User1 = existingUser.Id, Id_User2 = exUser.Id, points = points, User1 = user1, User2 = user2 };
                                     _context.Matches.Add(match1);
 
-                                    var match2 = new Match { Id_User2 = existingUser.Id, Id_User1 = exUser.Id, points = points, User1 = user2, User2 = user1  };
-                                    _context.Matches.Add(match2);
-                                }
+                                var match2 = new Match { Id_User2 = existingUser.Id, Id_User1 = exUser.Id, points = points, User1 = user2, User2 = user1  };
+                                _context.Matches.Add(match2);
                             }
                         }
+                    }*/
 
 
                         await _context.SaveChangesAsync();
@@ -194,14 +243,59 @@ namespace Cinder.Controllers {
 
         }
 
-        /// <summary>
-        /// Displays the matched users based on the current user's matches.
-        /// </summary>
-        /// <returns>A view listing matched users.</returns>
-        [Authorize]
-        public async Task<IActionResult> MatchedUsers()
+private async Task<List<UserDto>> GetAllUserData()
+{
+    return await _context.Users
+        .Include(u => u.Faculty)  // Eager load the faculty data
+        .Select(u => new UserDto
         {
-            var userId = _userManager.GetUserId(User); // Get the current logged-in user's ID
+            Id = u.Id,
+            FirstName = u.FirstName,
+            LastName = u.LastName,
+            MyBooleanProperty = u.MyBooleanProperty,
+            Bio = u.Bio,
+            Age = u.Age,
+            Faculty = u.Faculty == null ? null : new FacultyDto
+            {
+                Id_Faculty = u.Faculty.Id_Faculty,
+                Name = u.Faculty.Name
+            },
+            FacultyYear = u.FacultyYear,
+            Rating = u.Rating,
+            Sex = u.Sex,
+            Employed = u.Employed,
+            Employment = u.Employment,
+            Smoker = u.Smoker,
+            Pets = u.Pets,
+            ImageURL = u.ImageURL,
+            LeaseDuration = u.LeaseDuration,
+            Property = null,  // Assuming no need to serialize complex properties
+            MatchedUsers = null,  // Avoid serializing potentially recursive relationships
+            Languages = u.UserLanguages.Select(ul => new LanguageDto
+            {
+                Id_Language = ul.Language.Id_Language,
+                Name = ul.Language.Name
+            }).ToList(),
+            Hobbies = u.UserHobbies.Select(uh => new HobbyDto
+            {
+                Id_Hobby = uh.Hobby.Id_Hobby,
+                Name = uh.Hobby.Name
+            }).ToList()
+        })
+        .ToListAsync();
+}
+
+
+
+
+
+
+
+
+[Authorize]
+    public async Task<IActionResult> MatchedUsers()
+    {
+        var userId = _userManager.GetUserId(User); // Get the current logged-in user's ID
 
             // Fetch matches where the current user is involved
             var matchedUsers = await _context.Matches
@@ -209,6 +303,6 @@ namespace Cinder.Controllers {
                 .Include(m => m.User2) // Include the related user details
                 .ToListAsync();
 
-            return View(matchedUsers);
-        }}
+        return View(matchedUsers);
+    }    
 }
