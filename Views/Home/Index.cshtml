@@ -56,3 +56,23 @@
     <img id="home-page-img-4" src="~/Assets/Home Page Illustration 4.png" alt="Home Page Illustration" width="250"
         height="250">
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const elements = document.querySelectorAll('.cndr-home-page-container');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1; // Make the element fully opaque
+                    entry.target.classList.add(entry.target.classList.contains('left-aligned') ? 'left-aligned' : 'right-aligned');
+                    observer.unobserve(entry.target); // Stop observing the element after animation
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        elements.forEach(element => observer.observe(element));
+    });
+</script>
