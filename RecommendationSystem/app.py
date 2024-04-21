@@ -10,6 +10,8 @@ from scipy.spatial.distance import cosine
 import sys
 import json
 
+
+# OPENAI @Anja
 BASE_URL = "https://openai-proxy.sellestial.com/api/"
 API_KEY = "4ppeg2osd4nm"
 client = openai.OpenAI(api_key=API_KEY, base_url=BASE_URL)
@@ -23,9 +25,11 @@ def recommend():
     return jsonify(processed_data)
 
 def process_user_data(users_data):
-    # Your recommendation logic here
+
+    print("INPUT: ")
     print(users_data)
-    print("END OD INPUT")
+
+    # Data format used for analyizing
     structured_data = {
         'id': [],
         'FirstName': [],
@@ -43,11 +47,13 @@ def process_user_data(users_data):
         'Languages': [],
         'Hobbies': []
     }
+
     try:
-        # print("\nINPUT JSON:\n" + users_data)
-        for entry in users_data:
-            print(entry)
-            print("-----------------------------------")
+        signed_user_id = users_data['existingUserId']
+        user_list = users_data['users']
+        print("Element[0]: ")
+        print(signed_user_id)
+        for entry in user_list:
             structured_data['id'].append(entry['id'])
             structured_data['FirstName'].append(entry['firstName'])
             structured_data['LastName'].append(entry['lastName'])
@@ -63,21 +69,17 @@ def process_user_data(users_data):
             structured_data['Pets'].append(entry['pets'])
             structured_data['Languages'].append([lang['name'] for lang in entry['languages'] if lang['name'] != None])            
             structured_data['Hobbies'].append([hobby['name'] for hobby in (entry['hobbies'] if entry['hobbies'] else []) if hobby['name']])
+
     except Exception as e:
-        print(e)
         import traceback
         traceback.print_exception(e)
-        print("greška u inputu") 
-        # Processing languages
+        print("Database input error.") 
 
-    # print("\nFILLED DATA:\n")
-    print(structured_data)
     df = pd.DataFrame(structured_data)
     df.set_index('id', inplace=True)
 
     # BOOLEAN ATRIBUTES HANDELING
 
-    # Convert boolean to int
     df['Employed'] = df['Employed'].astype(int)
     df['Smoker'] = df['Smoker'].astype(int)
     df['Pets'] = df['Pets'].astype(int)
@@ -86,7 +88,6 @@ def process_user_data(users_data):
     weights = np.array([1, 4, 3])  # Weights for Employed, Smoker, Pets respectively
     weights = weights / weights.sum()
 
-    # Calculate weighted Hamming distance
     def weighted_hamming_distance(x, y):
         return np.sum(weights * (x != y))
 
@@ -95,8 +96,6 @@ def process_user_data(users_data):
     boolean_distance_df = pd.DataFrame(squareform(boolean_distance_matrix), index=df.index, columns=df.index)
     user_boolean_sim = 1 / (1 + boolean_distance_df)
 
-
-    # print(user_boolean_sim)
 
     # NUMERICAL ATRIBUTES HANDELING
 
@@ -119,7 +118,6 @@ def process_user_data(users_data):
     distance_df = pd.DataFrame(distance_matrix, index=df.index, columns=df.index)
     user_numerical_sim = 1 / (1 + distance_df)
 
-    # print(user_numerical_sim)
 
     # LANGUAGE HANDELING 
 
@@ -131,7 +129,7 @@ def process_user_data(users_data):
 
 
     # Select only language columns for similarity calculation
-    language_columns = list(languages)  # Assuming 'languages' contains all language column names
+    language_columns = list(languages)
     jaccard_distances = pdist(df[language_columns], metric='jaccard')
 
     # Convert the condensed distance matrix to a square matrix and then a DataFrame
@@ -139,29 +137,39 @@ def process_user_data(users_data):
     user_language_sim = 1 - user_language_dist_matrix
 
 
-    # print(user_language_sim)
 
     # FACULTY HANDELING
 
-    # Sample data of faculties and their categories
-    # TODO izvući ovo iz baze
+    # Faculty group mapping
     faculty_data = {
-        'CS': 'STEM',
-        'EE': 'STEM',
-        'Mechanical Engineering': 'STEM',
-        'Biology': 'STEM',
-        'Chemistry': 'STEM',
-        'Psychology': 'Social Sciences',
-        'Sociology': 'Social Sciences',
-        'History': 'Humanities',
-        'English': 'Humanities',
-        'Philosophy': 'Humanities',
-        'Art': 'Arts',
-        'Music': 'Arts',
-        'Theatre': 'Arts',
-        'Academy of Music' : 'Arts',
-        'Academy of Theatre, Radio, Film and Television' : 'Arts'
+    "Academy of Music": "Arts",
+    "Academy of Theatre, Radio, Film and Television": "Arts",
+    "Academy of Fine Arts and Design": "Arts",
+    "Biotechnical Faculty": "Natural Sciences",
+    "School of Economics and Business": "Business",
+    "Faculty of Architecture": "Engineering",
+    "Faculty of Social Sciences": "Social Sciences",
+    "Faculty of Electrical Engineering": "Engineering",
+    "Faculty of Pharmacy": "Health Sciences",
+    "Faculty of Civil and Geodetic Engineering": "Engineering",
+    "Faculty of Chemistry and Chemical Technology": "Natural Sciences",
+    "Faculty of Mathematics and Physics": "STEM",
+    "Faculty of Maritime Studies and Transport": "Engineering",
+    "Faculty of Computer and Information Science": "STEM",
+    "Faculty of Social Work": "Social Sciences",
+    "Faculty of Mechanical Engineering": "Engineering",
+    "Faculty of Sport": "Health Sciences",
+    "Faculty of Administration": "Business",
+    "Faculty of Arts": "Arts",
+    "Faculty of Medicine": "Health Sciences",
+    "Faculty of Natural Sciences and Engineering": "Natural Sciences",
+    "Faculty of Education": "Education",
+    "Faculty of Law": "Law",
+    "Faculty of Theology": "Humanities",
+    "Veterinary Faculty": "Health Sciences",
+    "Faculty of Health Sciences": "Health Sciences"
     }
+
 
     # Create DataFrame
     faculties = pd.DataFrame(list(faculty_data.items()), columns=['Faculty', 'Category'])
@@ -190,8 +198,6 @@ def process_user_data(users_data):
         for j in faculties['Faculty']:
             faculty_similarity_matrix.at[i, j] = faculty_similarity(i, j, faculties)
 
-    # print(faculty_similarity_matrix)
-
     user_faculty_sim = pd.DataFrame(0, index=df.index, columns=df.index)
     for i in df.index:
         for j in df.index:
@@ -200,13 +206,11 @@ def process_user_data(users_data):
             user_faculty_sim.at[i, j] = faculty_similarity_matrix.at[fac1, fac2]
 
 
-    # print(user_faculty_sim)
 
     # HOBBY HANDELING
 
-    # TODO Izvući ovo iz baze @anastasija
 
-    # List of all possible hobbies
+    # List of all hobbies options
     all_hobbies = [
         "Reading", "Writing", "Coding", "Playing an instrument", "Drawing",
         "Cooking", "Gaming", "Hiking", "Photography", "Traveling", "Painting",
@@ -233,43 +237,43 @@ def process_user_data(users_data):
 
     # BIO HANDELING
 
-    def get_bio_similarity(bio1, bio2, model="gpt-4"):
-        """Get bio similarity using OpenAI's chat completion."""
-        try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": "Calculate the similarity between two bios and respond only with a float from 0-1."},
-                    {"role": "user", "content": bio1},
-                    {"role": "user", "content": bio2}
-                ]
-            )
-            response_text = response.choices[0].message.content
-            # print(response_text)
+    # def get_bio_similarity(bio1, bio2, model="gpt-4"):
+    #     """Get bio similarity using OpenAI's chat completion."""
+    #     try:
+    #         response = client.chat.completions.create(
+    #             model=model,
+    #             messages=[
+    #                 {"role": "system", "content": "Calculate the similarity between two bios and respond only with a float from 0-1."},
+    #                 {"role": "user", "content": bio1},
+    #                 {"role": "user", "content": bio2}
+    #             ]
+    #         )
+    #         response_text = response.choices[0].message.content
+    #         # print(response_text)
 
-            match = re.search(r'\b\d+\.\d+\b', response_text) # Find float in the response
-            if match:
-                return float(match.group(0))
-            else:
-                print("No float found in response.")
-                return 0
-        except Exception as e:
-            print(f"Error in fetching similarity: {e}")
-            return 0
+    #         match = re.search(r'\b\d+\.\d+\b', response_text) # Find float in the response
+    #         if match:
+    #             return float(match.group(0))
+    #         else:
+    #             print("No float found in response.")
+    #             return 0
+    #     except Exception as e:
+    #         print(f"Error in fetching similarity: {e}")
+    #         return 0
         
-    def calculate_bio_similarity(df):
-        """Calculate bio similarity matrix using OpenAI completions."""
-        n = len(df)
-        bio_similarity = np.zeros((n, n))
+    # def calculate_bio_similarity(df):
+    #     """Calculate bio similarity matrix using OpenAI completions."""
+    #     n = len(df)
+    #     bio_similarity = np.zeros((n, n))
         
-        for i in range(n):
-            for j in range(i + 1, n):
-                sim = get_bio_similarity(df.iloc[i]['Bio'], df.iloc[j]['Bio'])
-                bio_similarity[i][j] = bio_similarity[j][i] = sim
+    #     for i in range(n):
+    #         for j in range(i + 1, n):
+    #             sim = get_bio_similarity(df.iloc[i]['Bio'], df.iloc[j]['Bio'])
+    #             bio_similarity[i][j] = bio_similarity[j][i] = sim
 
-        return pd.DataFrame(bio_similarity, index=df['FirstName'], columns=df['FirstName'])
+    #     return pd.DataFrame(bio_similarity, index=df['FirstName'], columns=df['FirstName'])
 
-    bio_similarity_df = calculate_bio_similarity(df)
+    # bio_similarity_df = calculate_bio_similarity(df)
     # print(bio_similarity_df)
 
     ### COMBINING MATRICES FOR END RESULT
@@ -316,7 +320,6 @@ def process_user_data(users_data):
         
         return all_preferences
 
-    signed_user_id = structured_data['id'][0]  # Access the first user's ID
     output_data = get_best_matches(signed_user_id, combined_similarity_df)
     print(output_data)    
 
