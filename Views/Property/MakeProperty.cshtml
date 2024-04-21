@@ -4,205 +4,183 @@
     ViewData["Title"] = "Create Property";
 }
 
-<h2>Create Property</h2>
+<div class="cndr-main-login-register-container">
+    <div class="register-container form-container">
+        <h1 class="form-header">Create Property</h1>
+        <form asp-action="MakeProperty" class="cinder-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="UserId" type="hidden" value="@ViewBag.UserId" />
 
-<form asp-action="MakeProperty" class="cinder-form" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <label asp-for="Type" class="form-label">Type</label>
+                <select asp-for="Type" class="form-control">
+                    <option value="Apartment">Apartment</option>
+                    <option value="House">House</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
 
-    <input asp-for="UserId" type="hidden" value="@ViewBag.UserId" />
+            <div class="form-floating">
+                <label asp-for="Address" class="form-label">Address</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
 
+            <div class="select-form-container">
+                <label asp-for="Neighborhood" class="form-label">Neighborhood</label>
+                <select asp-for="Neighborhood" class="select-form">
+                    <option value="Bežigrad">Bežigrad</option>
+                    <option value="Center">Center</option>
+                    <option value="Črnuče">Črnuče</option>
+                    <option value="Dravlje">Dravlje</option>
+                    <option value="Golovec">Golovec</option>
+                    <option value="Jarše">Jarše</option>
+                    <option value="Moste">Moste</option>
+                    <option value="Polje">Polje</option>
+                    <option value="Posavje">Posavje</option>
+                    <option value="Rožnik">Rožnik</option>
+                    <option value="Rudnik">Rudnik</option>
+                    <option value="Rožna Dolina">Rožna Dolina</option>
+                    <option value="Sostro">Sostro</option>
+                    <option value="Šentvid">Šentvid</option>
+                    <option value="Šiška">Šiška</option>
+                    <option value="Šmarna gora">Šmarna gora</option>
+                    <option value="Trnovo">Trnovo</option>
+                    <option value="Vič">Vič</option>
+                    <option value="Vic-Rudnik">Vic-Rudnik</option>
+                    <option value="Vodmat">Vodmat</option>
+                    <option value="Za gradom">Za gradom</option>
+                    <option value="Zalog">Zalog</option>
+                    <option value="Zelena jama">Zelena jama</option>
+                    <option value="Župančičeva jama">Župančičeva jama</option>
+                </select>
+                <span asp-validation-for="Neighborhood" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Type" class="control-label">Type</label>
-        <select asp-for="Type" class="form-control">
-            <option value="Apartment">Apartment</option>
-            <option value="House">House</option>
-        </select>
-        <span asp-validation-for="Type" class="text-danger"></span>
+            <div class="form-floating">
+                <label asp-for="SquareMeters" class="form-label">Square Meters</label>
+                <input asp-for="SquareMeters" type="number" class="form-control" />
+                <span asp-validation-for="SquareMeters" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Image" class="form-label">Image</label>
+                <input asp-for="Image" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Deposit" class="form-label">Deposit</label>
+                <input asp-for="Deposit" type="number" class="form-control" />
+                <span asp-validation-for="Deposit" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Furnishings" class="form-label">Furnishings</label>
+                <select asp-for="Furnishings" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Furnishings" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Parking" class="form-label">Parking</label>
+                <select asp-for="Parking" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Parking" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="PetsAllowed" class="form-label">Pets Allowed</label>
+                <select asp-for="PetsAllowed" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="PetsAllowed" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="SmokingAllowed" class="form-label">Smoking Allowed</label>
+                <select asp-for="SmokingAllowed" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="SmokingAllowed" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="GuestsAllowed" class="form-label">Guests Allowed</label>
+                <select asp-for="GuestsAllowed" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="GuestsAllowed" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="Wifi" class="form-label">Wifi</label>
+                <select asp-for="Wifi" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Wifi" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="WashingMachine" class="form-label">Washing Machine</label>
+                <select asp-for="WashingMachine" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="WashingMachine" class="text-danger"></span>
+            </div>
+
+            @* <div class="form-floating">
+                <label asp-for="ClosestPublicTransport" class="form-label">Closest Public Transport</label>
+                <input asp-for="ClosestPublicTransport" type="number" class="form-control" />
+                <span asp-validation-for="ClosestPublicTransport" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="ClosestGorceryStore" class="form-label">Closest Grocery Store</label>
+                <input asp-for="ClosestGorceryStore" type="number" class="form-control" />
+                <span asp-validation-for="ClosestGorceryStore" class="text-danger"></span>
+            </div> *@
+
+            <div class="form-floating">
+                <label asp-for="HouseRules" class="form-label">House Rules</label>
+                <textarea asp-for="HouseRules" class="form-control"></textarea>
+                <span asp-validation-for="HouseRules" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="NumberOfBathrooms" class="form-label">Number Of Bathrooms</label>
+                <input asp-for="NumberOfBathrooms" type="number" class="form-control" />
+                <span asp-validation-for="NumberOfBathrooms" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="NumberOfBedrooms" class="form-label">Number Of Bedrooms</label>
+                <input asp-for="NumberOfBedrooms" type="number" class="form-control" />
+                <span asp-validation-for="NumberOfBedrooms" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <label asp-for="MaxNumberOfTenants" class="form-label">Max Number Of Tenants</label>
+                <input asp-for="MaxNumberOfTenants" type="number" class="form-control" />
+                <span asp-validation-for="MaxNumberOfTenants" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="cndr-secondary-button">Create</button>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Address" class="control-label">Address</label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-
-    @* <div class="form-group">
-        <input asp-for="City" class="form-control" type="hidden" value="Ljubljana" />
-        <span asp-validation-for="City" class="text-danger"></span>
-    </div> *@
-    
-    <div class="form-group">
-        <label asp-for="Neighborhood" class="control-label">Neighborhood</label>
-        <select asp-for="Neighborhood" class="control-label">
-            <option value="Bežigrad">Bežigrad</option>
-            <option value="Center">Center</option>
-            <option value="Črnuče">Črnuče</option>
-            <option value="Dravlje">Dravlje</option>
-            <option value="Golovec">Golovec</option>
-            <option value="Jarše">Jarše</option>
-            <option value="Moste">Moste</option>
-            <option value="Polje">Polje</option>
-            <option value="Posavje">Posavje</option>
-            <option value="Rožnik">Rožnik</option>
-            <option value="Rudnik">Rudnik</option>
-            <option value="Rožna Dolina">Rožna Dolina</option>
-            <option value="Sostro">Sostro</option>
-            <option value="Šentvid">Šentvid</option>
-            <option value="Šiška">Šiška</option>
-            <option value="Šmarna gora">Šmarna gora</option>
-            <option value="Trnovo">Trnovo</option>
-            <option value="Vič">Vič</option>
-            <option value="Vic-Rudnik">Vic-Rudnik</option>
-            <option value="Vodmat">Vodmat</option>
-            <option value="Za gradom">Za gradom</option>
-            <option value="Zalog">Zalog</option>
-            <option value="Zelena jama">Zelena jama</option>
-            <option value="Župančičeva jama">Župančičeva jama</option>
-        </select>
-        <span asp-validation-for="Neighborhood" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="SquareMeters" class="control-label">Square Meters</label>
-        <input asp-for="SquareMeters" type="number" class="form-control" />
-        <span asp-validation-for="SquareMeters" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Description" class="control-label">Description</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Image" class="control-label">Image</label>
-        <input asp-for="Image" type="file" class="form-control" />
-        <span asp-validation-for="Image" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Deposit" class="control-label">Deposit</label>
-        <input asp-for="Deposit" type="number" class="form-control" />
-        <span asp-validation-for="Deposit" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Furnishings" class="control-label">Furnishings</label>
-        <select asp-for="Furnishings" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="Furnishings" class="text-danger"></span>
-    </div>
-
-    @* <div class="form-group">
-    <label asp-for="Amenities" class="control-label">Amenities</label>
-    <input asp-for="Amenities" class="form-control" />
-    <span asp-validation-for="Amenities" class="text-danger"></span>
-    </div> *@
-
-    <div class="form-group">
-        <label asp-for="Parking" class="control-label">Parking</label>
-        <select asp-for="Parking" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="Parking" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="PetsAllowed" class="control-label">Pets Allowed</label>
-        <select asp-for="PetsAllowed" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="PetsAllowed" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="SmokingAllowed" class="control-label">Smoking Allowed</label>
-        <select asp-for="SmokingAllowed" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="SmokingAllowed" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="GuestsAllowed" class="control-label">Guests Allowed</label>
-        <select asp-for="GuestsAllowed" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="GuestsAllowed" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Wifi" class="control-label">Wifi</label>
-        <select asp-for="Wifi" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="Wifi" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="WashingMachine" class="control-label">Washing Machine</label>
-        <select asp-for="WashingMachine" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="WashingMachine" class="text-danger"></span>
-    </div>
-
-    @* <div class="form-group">
-    <label asp-for="OutDoorSpace" class="control-label">Outdoor Space</label>
-    <input asp-for="OutDoorSpace" class="form-control" />
-    <span asp-validation-for="OutDoorSpace" class="text-danger"></span>
-    </div> *@
-
-    <div class="form-group">
-        <label asp-for="ClosestPublicTransport" class="control-label">Closest Public Transport</label>
-        <input asp-for="ClosestPublicTransport" type="number" class="form-control" />
-        <span asp-validation-for="ClosestPublicTransport" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ClosestGorceryStore" class="control-label">Closest Grocery Store</label>
-        <input asp-for="ClosestGorceryStore" type="number" class="form-control" />
-        <span asp-validation-for="ClosestGorceryStore" class="text-danger"></span>
-    </div>
-
-    @* <div class="form-group">
-    <label asp-for="NoiseLevel" class="control-label">Noise Level</label>
-    <input asp-for="NoiseLevel" class="form-control" />
-    <span asp-validation-for="NoiseLevel" class="text-danger"></span>
-    </div> *@
-
-    <div class="form-group">
-        <label asp-for="HouseRules" class="control-label">House Rules</label>
-        <textarea asp-for="HouseRules" class="form-control"></textarea>
-        <span asp-validation-for="HouseRules" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="NumberOfBathrooms" class="control-label">Number Of Bathrooms</label>
-        <input asp-for="NumberOfBathrooms" type="number" class="form-control" />
-        <span asp-validation-for="NumberOfBathrooms" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="NumberOfBedrooms" class="control-label">Number Of Bedrooms</label>
-        <input asp-for="NumberOfBedrooms" type="number" class="form-control" />
-        <span asp-validation-for="NumberOfBedrooms" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="MaxNumberOfTenants" class="control-label">Max Number Of Tenants</label>
-        <input asp-for="MaxNumberOfTenants" type="number" class="form-control" />
-        <span asp-validation-for="MaxNumberOfTenants" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary cinder-button">Create</button>
-</form>
+</div>

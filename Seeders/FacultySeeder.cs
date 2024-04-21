@@ -2,6 +2,9 @@ using Cinder.Data;
 using Cinder.Models;
 
 namespace Cinder.Seeders{
+    /// <summary>
+    /// Seeds faculties into the database if they do not already exist.
+    /// </summary>
     public class FacultySeeder{
 
         public static void SeedAllFaculties(ApplicationContext context){

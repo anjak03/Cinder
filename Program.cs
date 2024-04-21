@@ -8,21 +8,32 @@ using Cinder.Seeders;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationContext") ?? throw new InvalidOperationException("Connection string 'ApplicationContext' not found.")));
-/*
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationContext>();*/
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationContext>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Add live sass compiler
 builder.Services.AddSassCompiler();
 
+// Add SignalR for messaging
+builder.Services.AddSignalR();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+        builder.WithOrigins("https://localhost:7058") 
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
+});
+
+builder.Services.AddScoped<MessageService>(); 
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
 var app = builder.Build();
+
 
 using(var scope = app.Services.CreateScope())
 {
@@ -30,7 +41,6 @@ using(var scope = app.Services.CreateScope())
     DbInitializer.Initialize(context);
 }
 
-//ova var scope znaci deka ke se ozvede ovoj kod sekoj pat i deka tuka ke se kreiraat rolesot i userot najcesto se prai admin
 using(var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
@@ -39,7 +49,6 @@ using(var scope = app.Services.CreateScope())
     var context = serviceProvider.GetRequiredService<ApplicationContext>();
 
     await UserSeeder.SeedRolesAsync(roleManager);
-    //await UserSeeder.SeedUsersAsync(userManager);
     LanguageSeeder.SeedAllLanguages(context);
     FacultySeeder.SeedAllFaculties(context);
     HobbySeeder.SeedAllHobbies(context);
@@ -49,9 +58,11 @@ using(var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseCors("CorsPolicy");
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

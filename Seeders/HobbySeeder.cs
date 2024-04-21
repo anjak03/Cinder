@@ -2,9 +2,10 @@ using Cinder.Data;
 using Cinder.Models;
 
 namespace Cinder.Seeders{
-
+    /// <summary>
+    /// Seeds hobbies into the database if they do not already exist.
+    /// </summary>
     public class HobbySeeder{
-
         public static void SeedAllHobbies (ApplicationContext context){
             if(!context.Hobbies.Any()){
 

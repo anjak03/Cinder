@@ -1,15 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Cinder.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Cinder.Data
 {
+    /// <summary>
+    /// The database context used for the application which includes all the models and their configurations.
+    /// </summary>
     public class ApplicationContext : IdentityDbContext<User>
     {
+        public DbSet<Message> Messages {get; set;}
         public DbSet<Language> Languages { get; set; }
         public DbSet<Faculty> Faculties {get; set;}
         public DbSet<Hobby> Hobbies {get; set;} 
@@ -18,6 +19,11 @@ namespace Cinder.Data
         public DbSet<UserHobby> UserHobbies {get; set;}
         public DbSet<Match> Matches {get; set;}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationContext"/> class using the specified options.
+        /// The options typically include configurations such as the connection string and database provider.
+        /// </summary>
+        /// <param name="options">The options to be used by a DbContext.</param>
         public ApplicationContext (DbContextOptions<ApplicationContext> options)
             : base(options)
         {
@@ -25,10 +31,32 @@ namespace Cinder.Data
 
         public DbSet<Cinder.Models.User> User { get; set; } = default!;
 
+
+        /// <summary>
+        /// This method is called by the framework when the model for a derived context has been initialized,
+        /// but before the model has been locked down and used to initialize the context. 
+        /// The default implementation of this method does nothing, but it can be overridden in a derived class 
+        /// such that the model can be further configured before it is locked down.
+        /// </summary>
+        /// <param name="modelBuilder">Defines the model for the context being created.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configure message relationships
+            modelBuilder.Entity<Message>()
+                .HasOne<User>(m => m.Sender)
+                .WithMany() 
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Message>()
+                .HasOne<User>(m => m.Receiver)
+                .WithMany()
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            // Configure many-to-many relationships for UserLanguage
             modelBuilder.Entity<UserLanguage>()
                 .HasKey(ul => new { ul.UserId, ul.LanguageId });
 
@@ -42,7 +70,7 @@ namespace Cinder.Data
                 .WithMany(l => l.UserLanguages)
                 .HasForeignKey(ul => ul.LanguageId);
 
-
+            // Configure many-to-many relationships for UserHobby
             modelBuilder.Entity<UserHobby>()
                 .HasKey(uh => new { uh.UserId, uh.HobbyId });
 

@@ -1,7 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Cinder.Models{
-    public class Room {
+    /// <summary>
+    /// Represents a room that is part of a property.
+    /// </summary>
+    public class Room 
+    {
         [Key]
         public int Id_Room { get; set; }
         public int? Id_Property { get; set; }

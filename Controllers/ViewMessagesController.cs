@@ -5,50 +5,38 @@ using Cinder.Data;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cinder.Controllers;
+namespace Cinder.Controllers {
+    public class ViewMessagesController : Controller {
+        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationContext _context;
 
-public class ViewMessagesController : Controller {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewMessagesController"/>.
+        /// </summary>
+        /// <param name="logger">Logger for capturing runtime messages and errors.</param>
+        /// <param name="context">The database context for data access.</param>
+        public ViewMessagesController(ILogger<HomeController> logger, ApplicationContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
 
-    private readonly ILogger<HomeController> _logger;
-    private readonly ApplicationContext _context;
+        /// <summary>
+        /// Retrieves and displays messages from matches where the current user is involved.
+        /// </summary>
+        /// <returns>The view with matched messages.</returns>
+        public async Task<IActionResult> Messages()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    public ViewMessagesController(ILogger<HomeController> logger, ApplicationContext context)
-    {
-        _logger = logger;
-        _context = context;
-        
+            var potentialMatches = _context.Matches
+                .Include(m => m.User1)
+                .ThenInclude(u => u.MatchedUsers)
+                .Include(m => m.User2)
+                .Where(m => m.Id_User1 == userId && m.Matched == true)
+                .ToList();
+
+            return View(potentialMatches);
+        }
     }
-
-    public async Task<IActionResult> Messages()
-    {
-        // // Retrieve the ID of the logged-in user
-        // var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        // if (string.IsNullOrEmpty(userId))
-        // {
-        //     _logger.LogError("User is not logged in.");
-        //     return Unauthorized();
-        // }
-
-        // // Fetch the user's details from the database
-        // var user = await _context.Users.Include(u => u.MatchedUsers).
-        //                          .FirstOrDefaultAsync(u => u.Id == userId);
-        // if (user == null)
-        // {
-        //     _logger.LogError($"User not found with ID: {userId}");
-        //     return NotFound();
-        // }
-
-        // return View("Messages", user); // Pass the user to the view
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        // Retrieve potential matches for the given user
-        var potentialMatches = _context.Matches
-            .Include(m => m.User1)
-            .ThenInclude(u => u.MatchedUsers)
-            .Include(m => m.User2)
-            .Where(m => m.Id_User1 == userId && m.Matched == true)
-            .ToList();
-
-        return View(potentialMatches);
-    }
-
 }

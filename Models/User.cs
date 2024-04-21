@@ -21,22 +21,16 @@ namespace Cinder.Models {
         public bool? Smoker { get; set; }
         public bool? Pets { get; set; }
         public string? ImageURL { get; set; }
+        
         [NotMapped]
         public List<int>? Id_Language{ get; set; }
-        //public List<Language> Languages { get; set; } = new List<Language>();
         public virtual ICollection<UserLanguage>? UserLanguages { get; set; }
 
         [NotMapped]
         public List<int>? Id_Hobby { get; set; }
-
-        //public List<Hobby> Hobbies { get; set; } = new List<Hobby>();
         public virtual ICollection<UserHobby>? UserHobbies { get; set; }
-
         public int LeaseDuration { get; set; }
-
         public Property? Property { get; set; }
-
         public List<User>? MatchedUsers { get; set; } = new List<User>();
-        
     }
 }

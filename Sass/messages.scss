@@ -1,0 +1,128 @@
+@import "./variables.scss";
+
+section#msgIntro {
+  text-align: center;
+}
+
+.contact-messages-container {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  height: 60vh;
+
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      background-color: $tertiary-color;
+      border-radius: 10px;
+      box-shadow: $button-box-shadow;
+      transition: all 0.5s ease;
+      animation: slideFromTop 0.5s ease-out;
+
+      &:hover {
+        background-color: $tertiary-color-hover;
+        cursor: pointer;
+      }
+
+      &.clicked {
+        background-color: $tertiary-color-hover;
+      }
+
+      .user-name {
+        color: $primary-color;
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .messaging-space {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    width: 100%;
+    gap: 30px;
+
+    .messagesList {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-right: 10px;
+      height: 400px;
+      gap: 10px;
+      box-sizing: border-box;
+
+      .sent-message,
+      .received-message {
+        max-width: 60%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        margin-bottom: 10px;
+      }
+
+      .sent-message {
+        display: inline-block;
+        text-align: right;
+        background-color: $primary-color;
+        border: 1px solid $weaker-gray;
+        box-shadow: $text-message-box-shadow;
+        padding: 10px;
+        border-radius: 20px;
+        color: $secondary-color;
+        margin-right: 0;
+        margin-left: auto;
+      }
+
+      .received-message {
+        display: inline-block;
+        text-align: left;
+        padding: 10px;
+        margin-left: 0;
+        margin-right: auto;
+      }
+    }
+
+    .newMessageArea {
+      display: flex;
+      width: 100%;
+
+      input[type="text"] {
+        flex: 1;
+        margin-right: 8px;
+        border-radius: 8px;
+        border: 1px solid $weaker-gray;
+        padding: 5px;
+
+        &:active,
+        &:focus {
+          border: 1px solid $weaker-gray;
+        }
+      }
+
+      button {
+        flex-shrink: 0;
+        background-color: $tertiary-color;
+        border-color: $tertiary-color;
+        color: $primary-color;
+        transition: background-color 0.3s ease;
+        border-radius: 7px;
+
+        &:hover {
+          background-color: $tertiary-color-hover;
+          border-color: $tertiary-color-hover;
+        }
+      }
+    }
+  }
+}
