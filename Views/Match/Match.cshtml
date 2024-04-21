@@ -133,11 +133,11 @@
                 <input type="hidden" name="matchId" value="@Model[0].Id_Match" />
                 <input type="hidden" name="userId2" value="@Model[0].User2.Id" />
                 <input type="hidden" name="userId1" value="@Model[0].User1.Id" />
-                <button class="btn btn-primary cinder-button btn_img gr" type="submit" name="decision" value=true>
-                    <img src="../../images/green_tick.png" alt="Yes" />
+                <button class="match-btn right-aligned" type="submit" name="decision" value=false>
+                    <img src="~/Assets/red_X.png" alt="No" />
                 </button>
-                <button class="btn btn-primary cinder-button btn_img rd" type="submit" name="decision" value=false>
-                    <img src="../../images/red_X.png" alt="No" />
+                <button class="match-btn" type="submit" name="decision" value=true>
+                    <img src="~/Assets/green_tick.png" alt="Yes" />
                 </button>
             </form>
         }
