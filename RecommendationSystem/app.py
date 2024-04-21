@@ -20,11 +20,12 @@ app = Flask(__name__)
 def recommend():
     users_data = request.json
     processed_data = process_user_data(users_data)
-    # print(users_data)
     return jsonify(processed_data)
 
 def process_user_data(users_data):
     # Your recommendation logic here
+    print(users_data)
+    print("END OD INPUT")
     structured_data = {
         'id': [],
         'FirstName': [],
@@ -60,8 +61,8 @@ def process_user_data(users_data):
             structured_data['Employment'].append(entry['employment'])
             structured_data['Smoker'].append(entry['smoker'])
             structured_data['Pets'].append(entry['pets'])
-            structured_data['Languages'].append([lang['language']['name'] for lang in entry['userLanguages'] if lang['language'] != None])            
-            structured_data['Hobbies'].append([hobby['hobby']['name'] for hobby in (entry['userHobbies'] if entry['userHobbies'] else []) if hobby['hobby']])
+            structured_data['Languages'].append([lang['name'] for lang in entry['languages'] if lang['name'] != None])            
+            structured_data['Hobbies'].append([hobby['name'] for hobby in (entry['hobbies'] if entry['hobbies'] else []) if hobby['name']])
     except Exception as e:
         print(e)
         import traceback
@@ -275,7 +276,7 @@ def process_user_data(users_data):
 
     weights = {'boolean'  : 2,    # smoking, pets, is working
             'numerical': 1,    # age, faculty year
-            'faculty'  : 1,    # faculty similarity
+            'faculty'  : 1,    # faculty group similarity
             'language' : 0.5,  # language jaccard
             'hobby'    : 2     # hobby jaccard
             }
@@ -291,49 +292,35 @@ def process_user_data(users_data):
 
     # print(combined_similarity_df)
 
-    def get_best_matches(user_id, combined_similarity_df, num_matches=3):
+    def get_best_matches(user_id, combined_similarity_df):
         if user_id not in combined_similarity_df.index:
             return "User not found."
 
-        # Retrieve the similarity scores for the given user
         user_similarities = combined_similarity_df.loc[user_id]
 
         # Drop the user's own entry to exclude them from their matches
         user_similarities = user_similarities.drop(user_id)
-
-        # Sort the remaining users by similarity score in descending order
-        best_matches = user_similarities.sort_values(ascending=False).head(num_matches)
+        best_matches = user_similarities.sort_values(ascending=False)
 
         # Convert the Series to a list of tuples (user_id, score)
         best_matches_list = list(best_matches.items())
 
         return best_matches_list
 
-    def get_all_user_preferences(combined_similarity_df, num_matches=3):
-        # Initialize an empty list to store preferences for each user
+    def get_all_user_preferences(combined_similarity_df):
         all_preferences = []
         
-        # Iterate over each user ID in the DataFrame index
         for user_id in combined_similarity_df.index:
-            # Get the best matches for the current user
-            best_matches = get_best_matches(user_id, combined_similarity_df, num_matches)
-            
-            # Append the list of best matches (list of tuples) to the overall list
+            best_matches = get_best_matches(user_id, combined_similarity_df)
             all_preferences.append(best_matches)
         
         return all_preferences
 
-    # Example usage:
-    all_user_preferences = get_all_user_preferences(combined_similarity_df)
-    for idx, preferences in enumerate(all_user_preferences):
-        print(f"Preferences for User ID {idx}:")
-        for match in preferences:
-            print(f"    ID: {match[0]}, Score: {match[1]:.4f}")
-        print()  # Adds a newline for better separation of output
+    signed_user_id = structured_data['id'][0]  # Access the first user's ID
+    output_data = get_best_matches(signed_user_id, combined_similarity_df)
+    print(output_data)    
 
-
-        # For now, we'll just return the received data for simplicity
-        return {'status': 'success', 'data': all_user_preferences}
+    return {'status': 'success', 'data': output_data}
 
 
 if __name__ == '__main__':
