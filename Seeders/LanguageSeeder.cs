@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Cinder.Seeders
 {
+    /// <summary>
+    /// Seeds languages into the database if they do not already exist.
+    /// </summary>
     public class LanguageSeeder
     {
         public static void SeedAllLanguages(ApplicationContext context)

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Cinder.Seeders
 {
+    /// <summary>
+    /// Seeds users into the database if they do not already exist.
+    /// </summary>
     public class UserSeeder
     {
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)

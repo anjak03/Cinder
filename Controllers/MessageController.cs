@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 
+namespace Cinder.Controllers;
 
 [Authorize]
 [ApiController]
@@ -28,6 +29,11 @@ public class MessagesController : ControllerBase
         _hubContext = hubContext; 
     }
 
+    /// <summary>
+    /// Retrieves the conversation between the current user and the specified receiver.
+    /// </summary>
+    /// <param name="receiverId">The ID of the user with whom the conversation is to be retrieved.</param>
+    /// <returns>A list of messages as an asynchronous operation.</returns>
     [HttpGet("conversation/{receiverId}")]
     public async Task<IActionResult> GetConversation(string receiverId)
     {
@@ -37,6 +43,12 @@ public class MessagesController : ControllerBase
         return Ok(messages);
     }
 
+    /// <summary>
+    /// Creates a message sent from the current user to the specified receiver.
+    /// </summary>
+    /// <param name="receiverId">The ID of the receiver.</param>
+    /// <param name="messageDto">Data transfer object containing the content of the message.</param>
+    /// <returns>An acknowledgment of message creation.</returns>
     [HttpPost("{receiverId}")]
     public async Task<IActionResult> CreateMessage(string receiverId, MessageDto messageDto)
     {
@@ -47,6 +59,11 @@ public class MessagesController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Retrieves the chat history between the current user and another specified user.
+    /// </summary>
+    /// <param name="otherUserId">The ID of the other user involved in the chat.</param>
+    /// <returns>A list of messages as an asynchronous operation.</returns>
     [HttpGet("history/{otherUserId}")]
     public async Task<IActionResult> GetChatHistory(string otherUserId)
     {
