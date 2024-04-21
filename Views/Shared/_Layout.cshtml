@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Cinder.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -15,29 +21,65 @@
     <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home-page.css" asp-append-version="true" />
     <!-- Login and Register styles -->
-    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/form.css" asp-append-version="true" />
+    <!-- Match Page -->
+    <link rel="stylesheet" href="~/css/match.css" asp-append-version="true" />
 </head>
 
 <body>
     <div class="main-body-container">
         <header class="cndr-header">
             <div class="cndr-header-container">
-                <div class="cndr-header-item">
-                    <a class="cndr-black-color" id="home" asp-area="" asp-controller="Home" asp-action="Index">
-                        <ion-icon class="cndr-icon" name="home"></ion-icon>
-                    </a>
-                </div>
-                <div class="cndr-header-item">
-                    <a class="cndr-black-color" id="register" asp-area="Identity" asp-page="/Account/Register">
-                        <ion-icon name="person-add" class="cndr-icon"></ion-icon>
-                    </a>
-                </div>
-                <div class="cndr-header-item">
-                    <a class="cndr-black-color" id="login" asp-area="Identity" asp-page="/Account/Login">
-                        <ion-icon class="cndr-icon" name="log-in"></ion-icon>
-                    </a>
-                </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="cndr-header-item">
+                        <a class="cndr-black-color" id="home" asp-area="" asp-controller="Home" asp-action="Index">
+                            <ion-icon class="cndr-icon" name="home"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
+                        <a id="messages" class="cndr-black-color" asp-area="" asp-controller="ViewMessages"
+                            asp-action="Messages">
+                            <ion-icon class="cndr-icon" name="mail"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
+                        <a class="cndr-black-color" id="match-me" asp-area="" asp-controller="Match" asp-action="Match">
+                            <ion-icon class="cndr-icon" name="people-circle"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
+                        <a id="manage" class="cndr-black-color">
+                            <ion-icon class="cndr-icon" name="person"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+                            asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                            <a id="logout" href="javascript:void(0);" class="cndr-black-color"
+                                onclick="document.getElementById('logoutForm').submit();">
+                                <ion-icon class="cndr-icon" name="log-out"></ion-icon></a>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="cndr-header-item">
+                        <a class="cndr-black-color" id="home" asp-area="" asp-controller="Home" asp-action="Index">
+                            <ion-icon class="cndr-icon" name="home"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
+                        <a class="cndr-black-color" id="register" asp-area="Identity" asp-page="/Account/Register">
+                            <ion-icon name="person-add" class="cndr-icon"></ion-icon>
+                        </a>
+                    </div>
+                    <div class="cndr-header-item">
+                        <a class="cndr-black-color" id="login" asp-area="Identity" asp-page="/Account/Login">
+                            <ion-icon class="cndr-icon" name="log-in"></ion-icon>
+                        </a>
+                    </div>
+                }
             </div>
         </header>
         <main role="main" class="pb-3">
@@ -57,17 +99,51 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- Header spread animation -->
     <script>
+        var userName = "@UserManager.GetUserName(User)";
+        var isLoggedIn = @Html.Raw(Json.Serialize(SignInManager.IsSignedIn(User)));
+
         document.addEventListener('DOMContentLoaded', function () {
             const header = document.querySelector('.cndr-header-container');
-            const homeLink = header.querySelector('#home');
-            const registerLink = header.querySelector('#register');
-            const loginLink = header.querySelector('#login');
+            // For not logged in
+            let homeLink = undefined;
+            let registerLink = undefined;
+            let loginLink = undefined;
+            let homeOriginal = undefined;
+            let registerOriginal = undefined;
+            let loginOriginal = undefined;
+            // For logged in
+            let messagesLink = undefined;
+            let matchMeLink = undefined;
+            let manageLink = undefined;
+            let logoutLink = undefined;
+            let messagesOriginal = undefined;
+            let matchMeOriginal = undefined;
+            let manageOriginal = undefined;
+            let logoutOriginal = undefined;
 
-            // Save the original content (ionicons)
-            const homeOriginal = homeLink.innerHTML;
-            const registerOriginal = registerLink.innerHTML;
-            const loginOriginal = loginLink.innerHTML;
+            homeLink = header.querySelector('#home');
+            homeOriginal = homeLink.innerHTML;
+            // Not logged in
+            if (isLoggedIn) {
+                messagesLink = header.querySelector('#messages');
+                matchMeLink = header.querySelector('#match-me');
+                manageLink = header.querySelector('#manage');
+                logoutLink = header.querySelector('#logout');
+                // Save the original content (ionicons)
+                messagesOriginal = messagesLink.innerHTML;
+                matchMeOriginal = matchMeLink.innerHTML;
+                manageOriginal = manageLink.innerHTML;
+                logoutOriginal = logoutLink.innerHTML;
+            } else {
+                // Logged in
+                registerLink = header.querySelector('#register');
+                loginLink = header.querySelector('#login');
+                // Save the original content (ionicons)
+                registerOriginal = registerLink.innerHTML;
+                loginOriginal = loginLink.innerHTML;
+            }
 
             window.addEventListener('scroll', function () {
                 if (window.scrollY > 50) {
@@ -75,20 +151,33 @@
                     header.classList.add('wide-cndr-header-container');
                     // Change to text when scrolled
                     homeLink.innerHTML = 'Home';
-                    registerLink.innerHTML = 'Register';
-                    loginLink.innerHTML = 'Login';
+                    if (isLoggedIn) {
+                        messagesLink.innerHTML = 'Messages';
+                        matchMeLink.innerHTML = 'Match Me';
+                        manageLink.innerHTML = 'Hello, ' + userName + '!';
+                        logoutLink.innerHTML = 'Logout';
+                    } else {
+                        registerLink.innerHTML = 'Register';
+                        loginLink.innerHTML = 'Login';
+                    }
                 } else {
                     // Shrinking/Expanding animation
                     header.classList.remove('wide-cndr-header-container');
                     // Revert to the original ionicons
                     homeLink.innerHTML = homeOriginal;
-                    registerLink.innerHTML = registerOriginal;
-                    loginLink.innerHTML = loginOriginal;
+                    if (isLoggedIn) {
+                        messagesLink.innerHTML = messagesOriginal;
+                        matchMeLink.innerHTML = matchMeOriginal;
+                        manageLink.innerHTML = manageOriginal;
+                        logoutLink.innerHTML = logoutOriginal;
+                    } else {
+                        registerLink.innerHTML = registerOriginal;
+                        loginLink.innerHTML = loginOriginal;
+                    }
                 }
             });
         });
     </script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

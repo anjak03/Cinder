@@ -1,4 +1,36 @@
-@import './variables.scss';
+@import "./variables.scss";
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.cndr-home-page-container {
+  opacity: 0;
+  &.left-aligned {
+    animation: slideInFromLeft 1.5s forwards;
+  }
+  &.right-aligned {
+    animation: slideInFromRight 1.5s forwards;
+  }
+}
 
 #cndr-home-page-introduction {
   display: flex;

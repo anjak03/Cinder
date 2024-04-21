@@ -15,6 +15,25 @@ body {
   min-height: 100vh;
 }
 
+.cndr-secondary-button {
+  background-color: $secondary-color;
+  border-color: $secondary-color;
+  border-radius: 5px;
+  color: $primary-color;
+  font-weight: bold;
+  padding: 4px 10px;
+  transition: background-color 0.1s;
+  font-size: 18px;
+  text-decoration: none;
+  box-shadow: $button-box-shadow;
+
+  &:hover {
+    background-color: lighten($secondary-color, 20%);
+    border-color: lighten($secondary-color, 20%);
+    color: $primary-color;
+  }
+}
+
 .cndr-tertiary-button {
   background-color: $tertiary-color;
   border-color: $tertiary-color;

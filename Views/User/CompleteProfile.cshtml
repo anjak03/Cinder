@@ -23,82 +23,84 @@
     });
 </script>
 
-<h2>Add details</h2>
 
-<form class="cinder-form" asp-action="CompleteProfile">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="Bio"></label>
-        <input asp-for="Bio" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Age"></label>
-        <input asp-for="Age" type="number" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Id_Faculty"></label>
-        <select asp-for="Id_Faculty" class="form-control" asp-items="ViewBag.Faculties"></select>
-    </div>
-    <div class="form-group">
-        <label asp-for="FacultyYear"></label>
-        <input asp-for="FacultyYear" class="form-control" />
-        <span asp-validation-for="FacultyYear" class="text-danger"></span>
-    </div>
-    @* <div class="form-group">
-    <label asp-for="Rating"></label>
-    <input asp-for="Rating" class="form-control" />
-    </div> *@
-    <div class="form-group">
-        <label asp-for="Sex" class="control-label">Sex</label>
-        <select asp-for="Sex" class="form-control">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
-        <span asp-validation-for="Sex" class="text-danger"></span>
-    </div>
-    <div id="employed-select" class="form-group">
-        <label asp-for="Employed" class="control-label">Employed</label>
-        <select asp-for="Employed" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-    </div>
-    <div id="employment-group" class="form-group hidden">
-        <label asp-for="Employment"></label>
-        <input asp-for="Employment" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Smoker"></label>
-        <select asp-for="Smoker" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="Smoker" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Pets"></label>
-        <select asp-for="Pets" class="form-control">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <span asp-validation-for="Pets" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Id_Language" class="control-label">Languages</label>
-        <select asp-for="Id_Language" class="form-control" asp-items="ViewBag.Languages" multiple="multiple" required></select>
-    </div>
-    <div class="form-group">
-        <label asp-for="LeaseDuration"></label>
-        <input asp-for="LeaseDuration" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Id_Hobby" class="control-label">Choose Hobby</label>
-        <select asp-for="Id_Hobby" class="form-control" asp-items="ViewBag.Hobbies" multiple="multiple" required></select>
-    </div>
+<div class="cndr-main-login-register-container">
+    <div class="login-container form-container">
+        <h1 class="form-header">Add details</h1>
+        <form class="cinder-form" asp-action="CompleteProfile">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-floating">
+                <label asp-for="Bio" class="form-label"></label>
+                <input asp-for="Bio" class="form-control" />
+            </div>
+            <div class="form-floating">
+                <label asp-for="Age" class="form-label"></label>
+                <input asp-for="Age" type="number" class="form-control" />
+            </div>
+            <div class="form-floating">
+                <label asp-for="Id_Faculty" class="form-label">Faculty</label>
+                <select asp-for="Id_Faculty" class="form-control" asp-items="ViewBag.Faculties"></select>
+            </div>
+            <div class="form-floating">
+                <label asp-for="FacultyYear" class="form-label">Faculty Year</label>
+                <input asp-for="FacultyYear" class="form-control" />
+                <span asp-validation-for="FacultyYear" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Sex" class="form-label">Sex</label>
+                <select asp-for="Sex" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="Sex" class="text-danger"></span>
+            </div>
+            <div id="employed-select" class="form-floating">
+                <label asp-for="Employed" class="form-label">Employed</label>
+                <select asp-for="Employed" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div id="employment-group" class="form-floating hidden">
+                <label asp-for="Employment" class="form-label"></label>
+                <input asp-for="Employment" class="form-control" />
+            </div>
+            <div class="form-floating">
+                <label asp-for="Smoker" class="form-label"></label>
+                <select asp-for="Smoker" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Smoker" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Pets" class="form-label"></label>
+                <select asp-for="Pets" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Pets" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Id_Language" class="form-label">Languages</label>
+                <select asp-for="Id_Language" class="form-control" asp-items="ViewBag.Languages" multiple="multiple"
+                    required></select>
+            </div>
+            <div class="form-floating">
+                <label asp-for="LeaseDuration" class="form-label">Lease Duration</label>
+                <input asp-for="LeaseDuration" class="form-control" />
+            </div>
+            <div class="form-floating" style="padding-bottom: 10px;">
+                <label asp-for="Id_Hobby" class="form-label">Choose Hobby</label>
+                <select asp-for="Id_Hobby" class="form-control" asp-items="ViewBag.Hobbies" multiple="multiple"
+                    required></select>
+            </div>
 
-    <button type="submit" class="btn btn-primary cinder-button">Save</button>
-</form>
+            <button type="submit" class="cndr-secondary-button">Save</button>
+        </form>
+    </div>
+</div>
 
 <script>
     function toggleEmploymentField() {
